@@ -117,8 +117,6 @@ class MY_SQL_IN:
                      sys.stdout.write('\x1b[2K') 
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K')
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K')
                  else: # print('[+] Username['+'{:<6}'.format(self.args.UserForm) +"] :"+f'{ command}')
                       print('\n[*] Login URL  : ',  passlogin)
                       print('[*] SLQ Injaction Successful  Login ')
