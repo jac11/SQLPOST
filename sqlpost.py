@@ -10,6 +10,15 @@ import urllib
 import re
 class MY_SQL_IN:
      def __init__(self):
+         self.banner ='''
+             |________|___________________|_   
+             |        |      SQLPOST_     | |    UserName
+             | POST   | | | | | | | | | | | |%%=============-
+             |________|___________________|_|    Password         
+             |        |     @jacstory     |                
+                             
+'''    
+         print(self.banner)                                 
          self.control()
          self.read_command()
      def read_command(self):
@@ -94,8 +103,9 @@ class MY_SQL_IN:
                  response   = request.submit()
                  content    = response.read()
                  passlogin  = response.geturl() 
-                 Get_URL_Content = request.open(passlogin).read()                          
+                 Get_URL_Content = request.open(passlogin).read()                       
                  if  Get_URL_Content == Get_Oregnal_URL  :
+                     
                      print('\n[*] SLQ Injaction Command    : ', command )
                      print('[*] Login Page  URL          : ', url )                    
                      print('[*] Status                   :  NOT LOGIN') 
@@ -105,6 +115,8 @@ class MY_SQL_IN:
                      sys.stdout.write('\x1b[2K') 
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K') 
+                     sys.stdout.write('\x1b[1A')
+                     sys.stdout.write('\x1b[2K')
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K')
                  else: # print('[+] Username['+'{:<6}'.format(self.args.UserForm) +"] :"+f'{ command}')
@@ -178,8 +190,8 @@ class MY_SQL_IN:
          except urllib.error.URLError:
                   print("[*] Bad URL Connection refused")
                   exit()
-         except Exception as a :
-                   print( "[#] Error : ",a )
+         #except Exception as a :
+          #         print( "[#] Error : ",a )
          except KeyboardInterrupt:
               exit()
        
