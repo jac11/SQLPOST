@@ -24,7 +24,7 @@ class MY_SQL_IN:
              |        |      SQLPOST_     | |    UserName
              |'''+O+''' POST '''+R+'''  | | | | | | | | | | | |%%=============-
              |________|_'''+B+'''__________________|_|    Password         
-             |        |   '''+Y+'''  @jacstory  '''+B+'''   | '''+W    
+             |        |   '''+Y+P+'''@'''+Y+'''jacstory  '''+B+'''   | '''+W    
          print(self.banner)                                 
          self.control()
          self.read_command()
