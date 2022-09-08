@@ -285,8 +285,8 @@ class MY_SQL_IN:
         parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
         parser.add_argument("-PI","--PassInput" , action='store_true'           ,help ="use to Post in Password field")
         parser.add_argument("-UI","--UserInput" , action='store_true'           ,help ="use to Post in user field")
-        parser.add_argument("-U","--user"       , action=None                   ,help ="use pecifk user name ")
-        parser.add_argument("-P","--password"   , action=None                   ,help ="use pdcifik Passowrd")       
+        parser.add_argument("-U","--user"       , action=None                   ,help ="use specific username ")
+        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")       
         self.args = parser.parse_args()  
         print(W+"")
         if len(sys.argv)!=1 :
