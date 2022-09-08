@@ -110,7 +110,8 @@ class MY_SQL_IN:
                          content    = response.read()
                          passlogin  = response.geturl() 
                          Get_URL_Content = request.open(passlogin).read()                        
-                         if  Get_URL_Content == Get_Oregnal_URL  :
+                         if  Get_URL_Content == Get_Oregnal_URL and not self.args.Error or\
+                         self.args.Error and  self.args.Error in str(content):
                                print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
                                print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
                                print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
@@ -129,7 +130,8 @@ class MY_SQL_IN:
                          content    = response.read()
                          passlogin  = response.geturl() 
                          Get_URL_Content = request.open(passlogin).read()                        
-                         if  Get_URL_Content == Get_Oregnal_URL  :
+                         if  Get_URL_Content == Get_Oregnal_URL and not self.args.Error or\
+                         self.args.Error and  self.args.Error in str(content):
                                print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
                                print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
                                print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
@@ -283,10 +285,10 @@ class MY_SQL_IN:
         parser.add_argument("-UF","--UserForm"  , action=None                   ,help =" add name of the HTML Form Login User")
         parser.add_argument("-PF","--PassForm"  , action=None                   ,help ="add name of the HTML Form Login Passord")
         parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
-        parser.add_argument("-PI","--PassInput" , action='store_true'           ,help ="use to Post in Password field")
-        parser.add_argument("-UI","--UserInput" , action='store_true'           ,help ="use to Post in user field")
+        parser.add_argument("-PI","--PassInput" , action='store_true'           ,help ="use to POST in Password field")
+        parser.add_argument("-UI","--UserInput" , action='store_true'           ,help ="use to POST in user field")
         parser.add_argument("-U","--user"       , action=None                   ,help ="use specific username ")
-        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")       
+        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")         
         self.args = parser.parse_args()  
         print(W+"")
         if len(sys.argv)!=1 :
