@@ -31,8 +31,12 @@ class MY_SQL_IN:
      def read_command(self):
          try: 
              ssl._create_default_https_context = ssl._create_unverified_context
-             list_command  = open(self.args.Code,'r')   
-             list_command  = list_command .readlines()                
+             if self.args.Code:
+                list_command  = open(self.args.Code,'r')   
+                list_command  = list_command .readlines()       
+             else:
+                 list_command  = open("sql",'r')   
+                 list_command  = list_command .readlines()       
              for command in list_command :  
                  command  = str(command.strip())          
                  url = self.args.URL
@@ -281,7 +285,7 @@ class MY_SQL_IN:
         print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-u  ",'--URL'        , action=None                   ,help ="target url loign page") 
-        parser.add_argument("-c  ","--Code"       , action=None   ,required=True  ,help ="the List of SQL Commands") 
+        parser.add_argument("-c  ","--Code"       , action=None   ,required=False ,help ="the List of SQL Commands") 
         parser.add_argument("-UF ","--UserForm"   , action=None                   ,help =" add name of the HTML Form Login User")
         parser.add_argument("-PF ","--PassForm"   , action=None                   ,help ="add name of the HTML Form Login Passord")
         parser.add_argument("-E  ","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
