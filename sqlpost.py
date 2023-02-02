@@ -7,6 +7,7 @@ import argparse
 import mechanize
 import ssl
 import urllib
+import os
 
 W='\033[0m'     
 R='\033[31m'    
@@ -26,7 +27,7 @@ class MY_SQL_IN:
              |________|_'''+B+'''__________________|_|    Password         
              |        |   '''+Y+P+'''@'''+Y+'''jacstory  '''+B+'''     | '''+W    
          print(self.banner)                                 
-         self.control()
+         self.control()            
          self.read_command()
      def read_command(self):
          try: 
@@ -284,15 +285,15 @@ class MY_SQL_IN:
         
         print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-u  ",'--URL'        , action=None                   ,help ="target url loign page") 
+        parser.add_argument('--URL'        , action=None                   ,help ="target url loign page") 
         parser.add_argument("-c  ","--Code"       , action=None   ,required=False ,help ="the List of SQL Commands") 
-        parser.add_argument("-UF ","--UserForm"   , action=None                   ,help =" add name of the HTML Form Login User")
-        parser.add_argument("-PF ","--PassForm"   , action=None                   ,help ="add name of the HTML Form Login Passord")
-        parser.add_argument("-E  ","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
-        parser.add_argument("-PI ","--PassInput"  , action='store_true'           ,help ="use to POST in Password field")
-        parser.add_argument("-UI ","--UserInput"  , action='store_true'           ,help ="use to POST in user field")
-        parser.add_argument("-U  ","--user"       , action=None                   ,help ="use specific username ")
-        parser.add_argument("-P  ","--password"   , action=None                   ,help ="use specific Passowrd")         
+        parser.add_argument("-fu","--UserForm"   , action=None                   ,help =" add name of the HTML Form Login User")
+        parser.add_argument("-FP","--PassForm"   , action=None                   ,help ="add name of the HTML Form Login Passord")
+        parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
+        parser.add_argument("-pI","--PassInput"  , action='store_true'           ,help ="use to POST in Password field")
+        parser.add_argument("-uI","--UserInput"  , action='store_true'           ,help ="use to POST in user field")
+        parser.add_argument("-N","--user"       , action=None                   ,help ="use specific username ")
+        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")         
         self.args = parser.parse_args()  
         print(W+"")
         if len(sys.argv)!=1 :
