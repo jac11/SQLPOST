@@ -58,7 +58,7 @@ class MY_SQL_IN:
                      elif not self.args.UserForm and  self.args.user and not self.args.PassForm and not self.args.password\
                      and not self.args.UserInput and not self.args.PassInput:                  
                        request[f'username'] = f'{self.args.user}'
-                       request["password"] = 'f{command}'
+                       request["password"] = f'{command}'
                      elif not self.args.UserForm and not self.args.user and  not self.args.PassForm and  self.args.password\
                      and not self.args.UserInput and not self.args.PassInput : 
                        request['username']=f'{command}'
@@ -223,7 +223,7 @@ class MY_SQL_IN:
                       elif not self.args.UserForm and not self.args.user and  not self.args.PassForm and  self.args.password\
                       and not self.args.UserInput and not self.args.PassInput :   
                            print(B+'[+] '+R+'username : '+Y+ f'{command}')   
-                           print(B+'[+] '+R+'Password : '+Y+ f'{self.rgs.password}')      
+                           print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')      
                       elif  self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
                       and not self.args.UserInput and not self.args.PassInput :    
                            print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')
@@ -289,7 +289,7 @@ class MY_SQL_IN:
         print(B+"")
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument('--URL'        , action=None                   ,help ="target url loign page") 
-        parser.add_argument("-c  ","--Code"       , action=None   ,required=False ,help ="the List of SQL Commands") 
+        parser.add_argument("-c  ","--Code"       , action=None  ,help ="the List of SQL Commands") 
         parser.add_argument("-fu","--UserForm"   , action=None                   ,help =" add name of the HTML Form Login User")
         parser.add_argument("-FP","--PassForm"   , action=None                   ,help ="add name of the HTML Form Login Passord")
         parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
