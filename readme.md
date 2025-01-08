@@ -1,7 +1,7 @@
 
-# MY_SQL_IN - SQL Injection Tester
+# SQLPOST  - SQL Injection Tester
 
-`MY_SQL_IN` is a Python-based tool designed to test SQL injection vulnerabilities on login pages. It leverages a list of SQL injection commands to attempt to bypass login forms and determine if the target is vulnerable to SQL injection attacks. It uses the `mechanize` library to interact with the web page and simulate user input.
+`SQLPOST ` is a Python-based tool designed to test SQL injection vulnerabilities on login pages. It leverages a list of SQL injection commands to attempt to bypass login forms and determine if the target is vulnerable to SQL injection attacks. It uses the `mechanize` library to interact with the web page and simulate user input.
 
 ## Features
 
@@ -43,7 +43,7 @@ This script requires several command-line arguments to function. Below is an ove
 ### Example Usage
 
 ```bash
-python my_sql_in.py --URL http://example.com/login -c sql_commands.txt -fu username -FP password -E "Invalid credentials"
+python SQLPOST.py --URL http://example.com/login -c sql_commands.txt -fu username -FP password -E "Invalid credentials"
 ```
 
 This example would test the target URL (`http://example.com/login`) using the SQL commands from `sql_commands.txt`. It specifies the form field names for the username (`username`) and password (`password`) and checks for the "Invalid credentials" error message to determine if login failed.
