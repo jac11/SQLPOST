@@ -9,6 +9,7 @@ import ssl
 import urllib
 import os
 
+
 W='\033[0m'     
 R='\033[31m'    
 G='\033[0;32m'  
@@ -30,14 +31,15 @@ class MY_SQL_IN:
          self.control()            
          self.read_command()
      def read_command(self):
-         try: 
+         try:  
              ssl._create_default_https_context = ssl._create_unverified_context
              if self.args.Code:
                 list_command  = open(self.args.Code,'r')   
                 list_command  = list_command .readlines()       
              else:
                  list_command  = open("sql",'r')   
-                 list_command  = list_command .readlines()       
+                 list_command  = list_command .readlines()   
+
              for command in list_command :  
                  command  = str(command.strip())          
                  url = self.args.URL
@@ -46,7 +48,8 @@ class MY_SQL_IN:
                  request.set_handle_redirect(True)
                  request.set_handle_refresh(True, max_time=1)
                  request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-                 Get_Oregnal_URL = request.open(url).read()   
+                 request.set_ca_data(context=ssl._create_unverified_context(cert_reqs=ssl.CERT_NONE))
+                 Get_Oregnal_URL = request.open(url).read()        
                  def Command_Exe() :                      
                      if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
                      and not self.args.UserInput and not self.args.PassInput:
@@ -152,7 +155,8 @@ class MY_SQL_IN:
                        print(B+'[!] '+R+'Command Not Found'+W)
                        print(B+'[!] '+R+'Plases see the help options to how to use '+W)
                        exit()       
-                 try:             
+                 try:   
+                        
                     request.select_form(nr = 0)
                     Command_Exe()
                  except Exception :
@@ -171,9 +175,8 @@ class MY_SQL_IN:
                                     try:
                                       request.select_form(nr = 4)
                                       Command_Exe()
-                                    except Exception as D :    
+                                    except Exception as D :   
                                         print(B+"[!] "+R+"Error :",str(D)+W)
-                                        print(B+"[!] "+R+"Error : No Form Found "+Y+self.args.UserForm+R+" and "+ Y+self.args.PassForm+W)
                                         exit()                                                          
                  response   = request.submit()
                  content    = response.read()
