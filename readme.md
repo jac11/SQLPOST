@@ -37,7 +37,7 @@ It leverages the Selenium library to interact with web browsers and efficiently 
 --------------------------------------------------------------------------------------------------
 ## Usage
 ```
-python sql_injector.py -U <target_url> -uf <username_field> -pf <password_field> 
+python sqlpost.py -U <target_url> -uf <username_field> -pf <password_field> 
 ```
 * Command-Line Options:
 
