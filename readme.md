@@ -6,16 +6,6 @@
 SQLPOST_ is a Python-based tool designed to automate the process of SQL injection testing against web applications.
 It leverages the Selenium library to interact with web browsers and efficiently test various SQL payloads on login forms.
 
-**Features:**
-
-- **Automated testing:** Efficiently tests multiple SQL payloads against login forms.
-- **Configurable:** Supports various input field types (Name, CSS Selector, XPath, ID).
-- **Flexible:** Allows for customization of username, password, and error messages.
-- **User-friendly:** Provides clear output and progress indicators.
-- **Headless mode:** Can be run in headless mode for automated scans.
-- **Live mode:** Can be run with a visible browser window for manual inspection.
-
-
 ## Key Features:
 
 *    Automated Testing: Streamlined testing of multiple SQL payloads against target URLs.
