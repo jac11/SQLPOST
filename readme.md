@@ -1,90 +1,72 @@
+# SQLPOST_
 
-# SQLPOST  - SQL Injection Tester
+**A Python script for automated SQL injection testing.**
 
-`SQLPOST ` is a Python-based tool designed to test SQL injection vulnerabilities on login pages. It leverages a list of SQL injection commands to attempt to bypass login forms and determine if the target is vulnerable to SQL injection attacks. It uses the `mechanize` library to interact with the web page and simulate user input.
 
-## Features
+SQLPOST_ is a Python-based tool designed to automate the process of SQL injection testing against web applications.
+It leverages the Selenium library to interact with web browsers and efficiently test various SQL payloads on login forms.
 
-- **SQL Injection Testing**: It attempts various SQL injection payloads using a list of predefined commands.
-- **Customizable**: You can specify custom usernames, passwords, form fields, and error messages to test specific vulnerabilities.
-- **Form Handling**: Supports POST and GET requests for custom login forms.
-- **Error Handling**: Custom error messages can be used to detect login failures and potential vulnerabilities.
-- **SSL Handling**: Supports SSL verification (or bypass) for secure connections.
+**Features:**
 
-## Requirements
+- **Automated testing:** Efficiently tests multiple SQL payloads against login forms.
+- **Configurable:** Supports various input field types (Name, CSS Selector, XPath, ID).
+- **Flexible:** Allows for customization of username, password, and error messages.
+- **User-friendly:** Provides clear output and progress indicators.
+- **Headless mode:** Can be run in headless mode for automated scans.
+- **Live mode:** Can be run with a visible browser window for manual inspection.
 
-- Python 3.x
-- `mechanize` library
-- `argparse` library
-- `ssl` (for SSL connections)
 
-To install the necessary libraries, run the following:
+## Key Features:
 
-```bash
-pip install mechanize
+*    Automated Testing: Streamlined testing of multiple SQL payloads against target URLs.
+*    Versatile Input Handling: Supports various input field types (Name, CSS Selector, XPath, ID) for accurate targeting.
+*    Flexible Customization: Customize username, password, error messages, and other parameters to tailor scans to specific targets.
+*    User-Friendly Interface: Provides clear output, progress indicators, and informative messages.
+*    Headless and Live Modes: Operate in headless mode for automated scans or with a visible browser window for manual inspection and debugging.
+*    Cross-Platform Compatibility: Designed to work on various operating systems.
+
+## Installation
+
+  * Install Required Libraries:
 ```
-
+    pip install selenium
+```
+  * Install geckodriver (for Firefox):
+        Download the appropriate geckodriver executable for your operating system from the official website.
+        Place the geckodriver executable in your system's PATH or in the same directory as this script.
+--------------------------------------------------------------------------------------------------
 ## Usage
-
-### Command-line Arguments
-
-This script requires several command-line arguments to function. Below is an overview of each option:
-
-- `--URL` (Required): The target URL of the login page.
-- `-c`, `--Code` (Optional): The file containing a list of SQL commands to try. If not provided, the default `sql` file will be used.
-- `-fu`, `--UserForm` (Optional): The name of the HTML form's "username" field.
-- `-FP`, `--PassForm` (Optional): The name of the HTML form's "password" field.
-- `-E`, `--Error` (Optional): A specific error message to detect when login fails.
-- `-pI`, `--PassInput` (Optional): Specify if the password field should be POSTed.
-- `-uI`, `--UserInput` (Optional): Specify if the username field should be POSTed.
-- `-N`, `--user` (Optional): A specific username to use for testing.
-- `-P`, `--password` (Optional): A specific password to use for testing.
-
-### Example Usage
-
-```bash
-python SQLPOST.py --URL http://example.com/login -c sql_commands.txt -fu username -FP password -E "Invalid credentials"
 ```
-
-This example would test the target URL (`http://example.com/login`) using the SQL commands from `sql_commands.txt`. It specifies the form field names for the username (`username`) and password (`password`) and checks for the "Invalid credentials" error message to determine if login failed.
-
-### SQL Injection Testing Flow
-
-1. **Read Commands**: The script reads SQL commands from a file or default list.
-2. **Make Request**: It sends POST requests to the login form with the username and password fields populated by the SQL commands.
-3. **Check Response**: The script compares the response to the original login page to detect potential SQL injection success.
-4. **Display Results**: If SQL injection succeeds, the script prints the login URL, status, and credentials. Otherwise, it reports the failure.
-
-## Example Output
-
-### Success:
-```plaintext
-[*] SQL Injection Command    : ' OR 1=1 --
-[*] Login Page URL           : http://example.com/login
-[*] Status                   : LOGIN
-[+] username[username]      : admin
-[+] password[password]      : password123
+python sql_injector.py -U <target_url> -uf <username_field> -pf <password_field> 
 ```
+* Command-Line Options:
 
-### Failure:
-```plaintext
-[*] SQL Injection Command    : ' OR 1=1 --
-[*] Login Page URL           : http://example.com/login
-[*] Status                   : NOT LOGIN
-```
+| Option | Long Option | Description |
+|---|---|---|
+| -U | --url | Target URL of the login page. |
+| -uf | --user_form | Name of the username input field. |
+| -pf | --pass_form | Name of the password input field. |
+| -w | --wordlist | File containing the list of SQL commands to test (default: 'sql'). |
+| -e | --error | Error message to identify unsuccessful login attempts. |
+| -uc | --UCSS | CSS selector for the username input field. |
+| -pc | --PCSS | CSS selector for the password input field. |
+| -ux | --UXpath | XPath for the username input field. |
+| -px | --PXpath | XPath for the password input field. |
+| -ui | --IDUSER | ID for the username input field. |
+| -pi | --IDPASS | ID for the password input field. |
+| -p | --password | Specific password to test. |
+| -u | --username | Specific username to test. |
+| -f | --userforce | Force a specific username into the wordlist. |
+| -C | --Continue | Continue scanning through the entire wordlist. |
+| -L | --Length | Set the expected page length to compare with the original page. |
+| -l | --live | Show the web browser window (disable headless mode). |
+| -T | --time | Sleep duration between requests. |
+| --man |  | Show this help message. |
 
-## Error Handling
+Example Usage:
+Bash
 
-- The script will attempt to detect login failures based on the specified error message.
-- If no error message is provided, the tool will use the original page's content to determine whether login was successful.
-- Errors such as connection issues or invalid URLs will cause the script to exit gracefully with a message.
+python sql_injector.py -U "https://example.com/login" -uf "username" -pf "password" -w "custom_payloads.txt"
 
-## Troubleshooting
+This command will target the login page at https://example.com/login, use the input fields named "username" and "password," and utilize a custom wordlist of SQL payloads.
 
-1. **Connection Issues**: Ensure the target URL is correct and reachable.
-2. **Form Field Names**: If the tool fails to find the correct form fields (`username` and `password`), double-check the field names in the login page's HTML.
-3. **SSL Errors**: If you encounter SSL verification issues, use the `ssl._create_unverified_context` option to bypass SSL verification.
-
-## License
-
-This tool is provided for educational and ethical penetration testing purposes only. Use it responsibly and with permission from the target website owner.
