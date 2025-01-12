@@ -122,5 +122,5 @@ Here’s a reformatted version where all details are presented as examples for e
 
 -------------------------------------------------
 ## Developer
-* jac1devel@gmail.com
+* jac11devel@gmail.com
 ----------------------------------------------------
