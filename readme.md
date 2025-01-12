@@ -59,4 +59,68 @@ Bash
 python sql_injector.py -U "https://example.com/login" -uf "username" -pf "password" -w "custom_payloads.txt"
 
 This command will target the login page at https://example.com/login, use the input fields named "username" and "password," and utilize a custom wordlist of SQL payloads.
+Here’s a reformatted version where all details are presented as examples for easier understanding:
 
+---
+
+### Examples of `sqlpost.py` Usage
+
+1. **Basic Test with Default Wordlist:**
+   ```bash
+   sqlpost.py -U http://example.com/login -uf username -pf password
+   ```
+   *This tests a login page using the default wordlist to identify SQL injection vulnerabilities.*
+
+2. **Test with Custom Wordlist and Field Names:**
+   ```bash
+   sqlpost.py -U http://example.com/login -w payloads.txt -uf username -pf password
+   ```
+   *This uses a specific wordlist (`payloads.txt`) and specifies the username and password fields by their `name` attributes.*
+
+3. **Use XPath Selectors in Live Mode:**
+   ```bash
+   sqlpost.py -U http://example.com/login -ux "//input[@name='user']" -px "//input[@name='pass']" -l
+   ```
+   *This employs XPath selectors for the username and password fields and enables live mode to observe interactions.*
+
+4. **Test with Custom Username, Password, and Delay:**
+   ```bash
+   sqlpost.py -U http://example.com/login -u admin -p secret -T 1
+   ```
+   *This tests using a specific username (`admin`), password (`secret`), and introduces a 1-second delay between requests.*
+
+5. **Continue Testing Even After Success:**
+   ```bash
+   sqlpost.py -U http://example.com/login -w payloads.txt -C
+   ```
+   *This continues testing all SQL payloads from the wordlist, even after a successful login is found.*
+
+6. **Test by Targeting Fields via CSS Selectors:**
+   ```bash
+   sqlpost.py -U http://example.com/login -uc .username-class -pc .password-class
+   ```
+   *This identifies input fields using CSS selectors for the username and password.*
+
+7. **Target Fields Using ID Attributes:**
+   ```bash
+   sqlpost.py -U http://example.com/login -ui username-id -pi password-id
+   ```
+   *This targets input fields via their `id` attributes in the HTML.*
+
+8. **Set Expected Page Length to Compare Responses:**
+   ```bash
+   sqlpost.py -U http://example.com/login -L 2000
+   ```
+   *This sets the expected page length to detect differences in responses caused by SQL injection attempts.*
+
+
+9. **Replace Default Username in the Wordlist:**
+    ```bash
+    sqlpost.py -U http://example.com/login -f join
+    ```
+    *This replaces occurrences of the default `admin` username in the wordlist with `custom_user`.*
+
+-------------------------------------------------
+## Developer
+* jac1devel@gmail.com
+----------------------------------------------------
