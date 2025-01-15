@@ -87,8 +87,8 @@ class SQLInjector:
         except KeyboardInterrupt:
                   exit()        
     def test_sql_injection(self):
-        url_list = []
-        payload_list = []
+        self.url_list = []
+        self.payload_list = []
         if self.args.wordlist:
             list_command  = open(self.args.wordlist,'r')   
             list_command  = list_command.readlines()       
@@ -96,10 +96,9 @@ class SQLInjector:
             list_command  = open("./Package/sql",'r')
             list_command  = list_command.readlines() 
         self.Info_Print()
-        if self.args.Continue:
-            print(R+" "+"-"*150) 
-            print("|  "+f"{'   username    ':<23}","| "+f"{'     password   ':<24}"+"| ",f"{'   Status  ':<11}","|",f"{'   login url ':<80}","|")
-            print(" "+"-"*150+W)    
+        print(R+" "+"-"*150) 
+        print("|  "+f"{'   username    ':<23}","| "+f"{'     password   ':<24}"+"| ",f"{'   Status  ':<11}","|",f"{'   login url ':<80}","|")
+        print(" "+"-"*150+W)    
         for command in list_command :  
             if self.args.userforce:
                 if "admin" in command:
@@ -154,65 +153,62 @@ class SQLInjector:
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')    
                 else:
-                    if self.args.Continue:
-                        if self.args.username:
-                            print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
-                            url_list.append(self.driver.current_url)
-                            payload_list.append(command)
-                        elif self.args.password:
-                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
-                            url_list.append(self.driver.current_url)
-                            payload_list.append(command)  
-                        elif not  self.args.username and not self.args.password:  
-                            print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
-                            url_list.append(self.driver.current_url)
-                            payload_list.append(command)
-                    elif not self.args.Continue  : 
-                        print(O+'='*30+'\n')     
-                        print(B+'[*] '+'Login URL  : '+R,  str(self.driver.current_url))
-                        print(B+'[*] '+'SLQ Injaction Successful  Login \n')
-                        print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
-                        if self.args.username:
-                            print(B+'[+] '+R+'username : '+Y+f'{self.args.username}')
-                            print(B+'[+] '+R+'Password : '+Y+f'{command}')
-                        elif self.args.password:
-                            print(B+'[+] '+R+'username : '+Y+f'{command}')
-                            print(B+'[+] '+R+'Password : '+Y+ f'{self.args.password}')
-                        elif not  self.args.username and not self.args.password:
-                            print(B+'[+] '+R+'username : '+Y+f'{command}')
-                            print(B+'[+] '+R+'Password : '+Y+ 'password') 
-
-                        exit()
+                    if self.args.username:
+                        print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        self.url_list.append(self.driver.current_url)
+                        self.payload_list.append(command)
+                        if not self.args.Continue:
+                            self.Data_Analysis()
+                    elif self.args.password:
+                        print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        self.url_list.append(self.driver.current_url)
+                        self.payload_list.append(command)  
+                        if not self.args.Continue:
+                            self.Data_Analysis()
+                    elif not  self.args.username and not self.args.password:  
+                        print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        self.url_list.append(self.driver.current_url)
+                        self.payload_list.append(command)
+                        if not self.args.Continue:
+                            self.Data_Analysis()
             except Exception :
                 exit()
             except KeyboardInterrupt:
-                  exit()  
+                  exit() 
         if self.args.Continue:
-            print(O+'='*30+'\n') 
-            print(B+'[*] '+'SLQ Injaction Successful  Login \n')
-
-            for url in set(url_list):
-               print(B+'[*] '+'Redirections  : '+R,  url+"\n")
-            print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
-            if self.args.username:
-                print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
-                print(B+'[+] '+R+'Password : '+O+f'{payload_list[0]}')
-                for C in payload_list:
+           self.Data_Analysis()           
+    def Data_Analysis(self):
+        print('\n') 
+        print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+        for url in set(self.url_list):
+            print(B+'[*] '+'Redirections  : '+R,  url+"\n")
+        print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
+        if self.args.username:
+            print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
+            print(B+'[+] '+R+'Password : '+O+f'{self.payload_list[0]}')
+            if self.args.Continue:
+                for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')
-            elif self.args.password:
-                print(B+'[+] '+R+'username : '+O+f'{payload_list[0]}')
-                for C in payload_list:
+            exit()        
+        elif self.args.password:
+            print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
+            if self.args.Continue:
+                for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')  
-                print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')      
-            elif not  self.args.username and not self.args.password:
-                print(B+'[+] '+R+'username : '+O+f'{payload_list[0]}')
-                for C in payload_list:
+            print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
+            exit()    
+        elif not  self.args.username and not self.args.password:
+            print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
+            if self.args.Continue:
+                for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')
-                print(B+'[+] '+R+'Password : '+P+ 'password') 
+            print(B+'[+] '+R+'Password : '+P+ 'password') 
             exit()
-        print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
-        print(B+'[*] '+R+'Saugger To Use anther list Command '+W) 
-        self.driver.quit()
+        if len(self.payload_list) or len(self.url_list) == 0 :   
+            print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
+            print(B+'[*] '+R+'Saugger To Use anther list Command '+W) 
+            self.driver.quit()
+            exit()
     def Info_Print(self):
         print(B+"[+] Target url         --------------|- " +  str(self.args.url))
         time.sleep(0.20)
@@ -301,4 +297,4 @@ class SQLInjector:
             exit() 
 
 if __name__ == '__main__':
-    injector = SQLInjector()
+    SQLInjector()
