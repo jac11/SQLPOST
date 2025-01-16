@@ -33,6 +33,7 @@ python sqlpost.py -U <target_url> -uf <username_field> -pf <password_field>
 
 | Option | Long Option | Description |
 |---|---|---|
+| --div |  |  Specify the path to the Firefox WebDriver executable. |
 | -U | --url | Target URL of the login page. |
 | -uf | --user_form | Name of the username input field. |
 | -pf | --pass_form | Name of the password input field. |
@@ -48,7 +49,6 @@ python sqlpost.py -U <target_url> -uf <username_field> -pf <password_field>
 | -u | --username | Specific username to test. |
 | -f | --userforce | Force a specific username into the wordlist. |
 | -C | --Continue | Continue scanning through the entire wordlist. |
-| -L | --Length | Set the expected page length to compare with the original page. |
 | -l | --live | Show the web browser window (disable headless mode). |
 | -T | --time | Sleep duration between requests. |
 | --man |  | Show this help message. |
