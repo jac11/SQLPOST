@@ -61,7 +61,7 @@ class SQLInjector:
         if self.args.div:
            Path(self.args.div).rename("./Package/geckodriver")   
            print(R + "[+] File      -------------|- " + W + B + "File has been moved to ./Package/geckodriver" + W)
-           print(R + "[+] File      -------------|- " + W + B + "Now ready to use sqlpost with all power options" + W)
+           print(R + "[+] sqlpost   -------------|- " + W + B + "Now ready to use sqlpost with all power options" + W)
            exit()
         self.setup_browser()
         self.test_sql_injection()
