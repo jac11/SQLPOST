@@ -37,6 +37,7 @@ DESCRIPTION
               options:
                 -h,              --help                            show this help message and exit
                 --man                                              show this man page
+                --div                                              Specify the path to the Firefox WebDriver executable
                 -U URL,          --url URL                         Target URL of the login page
                 -uf USER_FORM,   --user_form USER_FORM             Name of the username input field
                 -pf PASS_FORM,   --pass_form PASS_FORM             Name of the password input field
@@ -52,7 +53,6 @@ DESCRIPTION
                 -u USERNAME,     --username USERNAME               Specific username to test
                 -f USERFORCE,    --userforce USERFORCE             Force a specific username into the wordlist
                 -C,              --Continue                        Continue scanning through the entire wordlist
-                -L LENGTH,       --Length LENGTH                   Set the expected page length to compare with the original page
                 -l,              --live                            Show the web browser window (disable headless mode)
                 -T TIME,         --time                            TIME Sleep duration between requests
                                                                              
@@ -60,77 +60,97 @@ DESCRIPTION
 OPTIONS
        --man  
             show this man page.
+        --div
+
+            Specify the absolute or relative path to the Firefox WebDriver executable.
+            This driver is required for browser automation using Selenium. 
+            Ensure the WebDriver version matches the installed Firefox browser version.
+            Example: --div /path/to/geckodriver"  
+
        -U, --url URL
+
             Target URL of the login page to test for SQL injection (required).
 
        -uf, --user_form FIELD_NAME
+
             The "name" attribute of the username input field in the HTML form. 
             Use this option if the username field is identified by its name attribute (optional).
 
        -pf, --pass_form FIELD_NAME
+
             The "name" attribute of the password input field in the HTML form.
             Use this option if the password field is identified by its name attribute (optional).
 
        -w, --wordlist FILE
+
             Specify a file containing a list of SQL payloads to test. 
             Each line in the file represents a separate SQL command to inject.
             Default wordlist: `sql` (optional).
 
        -e, --error MESSAGE
+
            Specify an error message to identify unsuccessful login attempts. 
            For example, 
            "Invalid username or password" helps determine whether a login attempt failed due to incorrect credentials (optional).
 
        -uc, --UCSS SELECTOR
+
             Provide a CSS selector to locate the username input field. 
             This is useful when the form uses CSS classes or IDs for field identification (optional).
 
        -pc, --PCSS SELECTOR
+
             Provide a CSS selector to locate the password input field. 
             Like the username field, 
             this is helpful for modern web applications with complex form structures (optional).
 
        -ux, --UXpath XPATH
+
             Specify the XPath for the username input field.
              XPath is useful for locating elements when the DOM structure is dynamic or lacks unique identifiers (optional).
 
        -px, --PXpath XPATH
+
             Specify the XPath for the password input field. 
             Similar to the username field, this option provides flexibility in locating form elements in complex HTML structures (optional).
 
        -ui, --IDUSER ID
+
             Specify the "ID" attribute of the username input field. This is commonly used when the username field has a unique ID attribute (optional).
 
        -pi, --IDPASS ID
+
             Specify the "ID" attribute of the password input field. 
             This is similar to the username field ID and ensures precise targeting of the password field (optional).
 
        -u, --username USERNAME
+
            Provide a specific username to test during the SQL injection attack. 
            This can be a known username or an entry from the wordlist (optional).
 
        -p, --password PASSWORD
+
            Provide a specific password to test during the SQL injection attack. 
            Useful for login forms requiring a fixed password with varying usernames (optional).
 
        -f, --userforce USERNAME
+
            Replace occurrences of "admin" in the wordlist with the specified username. 
            This allows for targeted testing with a customized username while using a generic wordlist (optional).
 
        -C, --Continue
+
            Continue testing all SQL payloads from the wordlist, 
            even after finding a successful login. 
            This option is helpful for identifying multiple vulnerabilities or bypass techniques (optional).
 
-       -L, --Length LENGTH
-           Set the expected page length to compare against the original page. 
-           This helps detect differences in page responses, which can indicate a successful or unsuccessful injection (optional).
-
        -l, --live
+
            Run the tool in live mode, displaying the browser window instead of running in headless mode. 
            This allows real-time observation of form interactions and responses. Default: headless mode (optional).
 
        -T, --time SECONDS
+
            Pause for a specified number of seconds between requests. 
            This reduces the risk of detection by server-side monitoring systems and prevents overloading the target server (optional).
 
