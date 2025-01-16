@@ -292,7 +292,7 @@ class SQLInjector:
         parser = argparse.ArgumentParser(description="SQL Injection Tester with Selenium")
         parser.add_argument('-U', '--url'         ,  help="Target URL of the login page")
         parser.add_argument('--man'               ,  action='store_true', help="show this man page")
-        parser.add_argument('--div'               ,  action='store', help="give the path of firefox driver")
+        parser.add_argument('--div'               ,  action='store', help="Specify the path to the Firefox WebDriver executable.")
         parser.add_argument('-uf', '--user_form'  ,  help="Name of the username input field")
         parser.add_argument('-pf', '--pass_form'  ,  help="Name of the password input field")
         parser.add_argument('-w', '--wordlist'    ,  help="File containing the list of SQL commands to test")
@@ -307,7 +307,6 @@ class SQLInjector:
         parser.add_argument('-u', '--username'    ,  help="Specific username to test")
         parser.add_argument('-f', '--userforce'   ,  help="Force a specific username into the wordlist")
         parser.add_argument('-C', '--Continue'    ,  action='store_true', help="Continue scanning through the entire wordlist")
-        parser.add_argument('-L', '--Length'      ,  help="Set the expected page length to compare with the original page")
         parser.add_argument('-l', '--live'        ,  action='store_true', help="Show the web browser window (disable headless mode)")
         parser.add_argument('-T', '--time'        ,  help="Sleep duration between requests")
 
