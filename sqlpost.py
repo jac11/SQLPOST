@@ -15,10 +15,11 @@ from selenium.common.exceptions import (
     InvalidArgumentException,
     JavascriptException,
 )
-
+from pathlib import Path
 import argparse
 import time
 import sys
+import os
 
 W='\033[0m'     
 R='\033[31m'    
@@ -27,6 +28,7 @@ O='\33[37m'
 B='\033[34m'    
 P= '\033[35m'   
 Y="\033[1;33m"   
+
 
 
 class SQLInjector:
@@ -39,13 +41,28 @@ class SQLInjector:
              |'''+O+''' POST '''+R+'''  | | | | | | | | | | | |%%============='''+O+'''-'''+R+'''
              |________|_'''+B+'''__________________|_|    Password         
              |        |   '''+Y+P+'''@'''+Y+'''jacstory  '''+B+'''     | '''+W    
-        print(self.banner+'\n')   
-
+        print(self.banner+'\n')  
         self.setup_args()
+        CheckDiv = os.listdir("./Package/")
+        if "geckodriver" not in CheckDiv and not self.args.div:
+            print(B + '[!] ' + R + 'Driver not Found  : - ' + O + '\n' + '=' * 20 + '\n\n' + W)
+            print(R + "[+] Error      -------------|- " + W + B + "Firefox driver not Found" + W)
+            print(R + "[+] Solution   -------------|- " + W + O + "Download Geckodriver (Firefox driver)" + W)
+            print(R + "[+] Link       -------------|- " + W + Y + "https://firefox-source-docs.mozilla.org/testing/geckodriver/index.html" + W)
+            print(R + "[+] Solution   -------------|- " + W + O + "Use --div then provide the path to the Firefox driver" + W)
+            exit() 
+        else: pass     
+
+    
         if self.args.man:
             from Package.man import ManPage
             ManPage()
             exit()
+        if self.args.div:
+           Path(self.args.div).rename("./Package/geckodriver")   
+           print(R + "[+] File      -------------|- " + W + B + "File has been moved to ./Package/geckodriver" + W)
+           print(R + "[+] File      -------------|- " + W + B + "Now ready to use sqlpost with all power options" + W)
+           exit()
         self.setup_browser()
         self.test_sql_injection()
     
@@ -67,7 +84,7 @@ class SQLInjector:
                   exit()       
         elif self.args.live : 
             try  :
-                service = Service('./geckodriver')
+                service = Service('./Package/geckodriver')
                 self.driver = webdriver.Firefox(service=service, options=options)  
                 self.driver.set_page_load_timeout(10)
                 self.driver.set_window_size(800, 600)  
@@ -138,10 +155,11 @@ class SQLInjector:
                         time.sleep(int(self.args.time))
                     user_field.send_keys(command)
                     pass_field.send_keys('password')      
-                pass_field.send_keys(Keys.RETURN)
+                pass_field.send_keys(Keys.RETURN) 
                 time.sleep(1)
                 page_source = self.driver.page_source
-                if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source :
+                if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source\
+                or self.args.url == self.driver.current_url:
                     print('\n\n')
                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
                     print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
@@ -154,21 +172,22 @@ class SQLInjector:
                         sys.stdout.write('\x1b[2K')    
                 else:
                     if self.args.username:
-                        print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command[0:26]   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)
                         if not self.args.Continue:
                             self.Data_Analysis()
                     elif self.args.password:
-                        print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{command[0:26] :<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)  
                         if not self.args.Continue:
                             self.Data_Analysis()
                     elif not  self.args.username and not self.args.password:  
-                        print(R+"|  "+Y+f"{command:<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{command[0:26] :<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)
+
                         if not self.args.Continue:
                             self.Data_Analysis()
             except Exception :
@@ -189,6 +208,7 @@ class SQLInjector:
             if self.args.Continue:
                 for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')
+            self.driver.quit()        
             exit()        
         elif self.args.password:
             print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
@@ -196,6 +216,7 @@ class SQLInjector:
                 for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')  
             print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
+            self.driver.quit()
             exit()    
         elif not  self.args.username and not self.args.password:
             print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
@@ -203,6 +224,7 @@ class SQLInjector:
                 for C in self.payload_list:
                     print(B+'             '+R+': '+O+f'{C}')
             print(B+'[+] '+R+'Password : '+P+ 'password') 
+            self.driver.quit()
             exit()
         if len(self.payload_list) or len(self.url_list) == 0 :   
             print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
@@ -270,6 +292,7 @@ class SQLInjector:
         parser = argparse.ArgumentParser(description="SQL Injection Tester with Selenium")
         parser.add_argument('-U', '--url'         ,  help="Target URL of the login page")
         parser.add_argument('--man'               ,  action='store_true', help="show this man page")
+        parser.add_argument('--div'               ,  action='store', help="give the path of firefox driver")
         parser.add_argument('-uf', '--user_form'  ,  help="Name of the username input field")
         parser.add_argument('-pf', '--pass_form'  ,  help="Name of the password input field")
         parser.add_argument('-w', '--wordlist'    ,  help="File containing the list of SQL commands to test")
