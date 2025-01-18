@@ -15,6 +15,7 @@ from selenium.common.exceptions import (
     InvalidArgumentException,
     JavascriptException,
 )
+import subprocess
 from pathlib import Path
 import argparse
 import time
@@ -62,6 +63,8 @@ class SQLInjector:
            Path(self.args.div).rename("./Package/geckodriver")   
            print(R + "[+] File      -------------|- " + W + B + "File has been moved to ./Package/geckodriver" + W)
            print(R + "[+] sqlpost   -------------|- " + W + B + "Now ready to use sqlpost with all power options" + W)
+           
+           subprocess.run(['chmod', '0777', './Package/geckodriver'])
            exit()
         self.setup_browser()
         self.test_sql_injection()
