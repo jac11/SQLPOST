@@ -276,9 +276,6 @@ class SQLInjector:
         if self.args.Continue : 
               print("[+] Continue           --------------|- " +  "TRUE")
               time.sleep(0.20) 
-        if self.args.Length  :
-              print("[+] Page Length        --------------|- " +  str(self.args.Length)+W+'\n')      
-              time.sleep(0.20) 
         if self.args.error:
               print("[+] Error Message      --------------|- " +  self.args.error )
               time.sleep(0.20)  
