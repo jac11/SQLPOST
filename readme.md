@@ -2,9 +2,11 @@
 
 **A Python script for automated SQL injection testing.**
 
+SQLPOST is a powerful and flexible tool designed to simplify SQL injection testing in login forms. Built with Python and Selenium, it automates the process of injecting payloads and analyzing responses, making it an essential tool for penetration testers and security researchers.
 
-SQLPOST_ is a Python-based tool designed to automate the process of SQL injection testing against web applications.
-It leverages the Selenium library to interact with web browsers and efficiently test various SQL payloads on login forms.
+With support for custom wordlists, advanced field targeting methods, real-time browser observation, and configurable delays to avoid detection, SQLPOST adapts seamlessly to diverse scenarios. Its comprehensive feature set, including error message handling, specific username and password testing, and continuous wordlist testing, ensures precision and thoroughness in identifying vulnerabilities.
+
+The inclusion of the man flag further enhances usability, providing detailed documentation for all options. SQLPOST empowers users to uncover weaknesses in authentication systems effectively, helping to secure applications against potential threat
 
 ## Key Features:
 
