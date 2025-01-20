@@ -56,6 +56,7 @@ class SQLInjector:
 
     
         if self.args.man:
+            package_path = os.path.join(os.getcwd())
             from Package.man import ManPage
             ManPage()
             exit()
@@ -162,7 +163,7 @@ class SQLInjector:
                 time.sleep(1)
                 page_source = self.driver.page_source
                 if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source\
-                or self.args.url == self.driver.current_url:
+                or self.args.url == self.driver.current_url or ('username' or password) in page_source:
                     print('\n\n')
                     print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
                     print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
@@ -238,16 +239,16 @@ class SQLInjector:
         print(B+"[+] Target url         --------------|- " +  str(self.args.url))
         time.sleep(0.20)
         if self.args.wordlist:
-            print("[+] wordlist           -------------|- " +  str(self.args.wordlist))
+            print("[+] wordlist           --------------|- " +  str(self.args.wordlist))
             time.sleep(0.20)
         else:
             print("[+] wordlist           --------------|- " +  "sql")  
             time.sleep(0.20) 
         if self.args.user_form  :
-            print("[+] UserForm             --------------|- " +  self.args.user_form)
+            print("[+] UserForm           --------------|- " +  self.args.user_form)
             time.sleep(0.20) 
         if self.args.pass_form  :
-            print("[+] PassForm             --------------|- " +  self.args.pass_form )  
+            print("[+] PassForm           --------------|- " +  self.args.pass_form )  
             time.sleep(0.20)   
         if self.args.UCSS:
               print("[+] CSS_SELECTOR USER  --------------|- " +  self.args.UCSS)
