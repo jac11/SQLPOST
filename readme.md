@@ -122,6 +122,11 @@ Here’s a reformatted version where all details are presented as examples for e
     ```
     *This replaces occurrences of the default `admin` username in the wordlist with `custom_user`.*
 
+---------------------------------------------------
+   
+## Demo Video
+
+[![Watch the demo video](https://i.ytimg.com/vi/kn-10g8m4S8/hqdefault.jpg)](https://www.youtube.com/watch?v=kn-10g8m4S8=164)
 -------------------------------------------------
 ## Developer
 * jac11devel@gmail.com
