@@ -140,8 +140,8 @@ class SQLInjector:
                    user_field = self.driver.find_element(By.XPATH, self.args.UXpath)
                    pass_field = self.driver.find_element(By.XPATH, self.args.PXpath)    
                 elif self.args.IDUSER and self.args.IDPASS:
-                    user_field = self.driver.find_element(By.ID, self.args.ID)
-                    pass_field = self.driver.find_element(By.ID, self.args.ID)
+                    user_field = self.driver.find_element(By.ID, self.args.IDUSER)
+                    pass_field = self.driver.find_element(By.ID, self.args.IDPASS)
                 user_field.clear()
                 pass_field.clear()
                 if self.args.username:
