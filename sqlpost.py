@@ -194,7 +194,8 @@ class SQLInjector:
 
                         if not self.args.Continue:
                             self.Data_Analysis()
-            except Exception :
+            except Exception as e  :
+                print(B+"[+] Error          --------------|- "+O+  str(e)+W)
                 exit()
             except KeyboardInterrupt:
                   exit() 
@@ -211,14 +212,14 @@ class SQLInjector:
             print(B+'[+] '+R+'Password : '+O+f'{self.payload_list[0]}')
             if self.args.Continue:
                 for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C}')
+                    print(B+'             '+R+': '+O+f'{C[1:]}')
             self.driver.quit()        
             exit()        
         elif self.args.password:
             print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
             if self.args.Continue:
                 for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C}')  
+                    print(B+'             '+R+': '+O+f'{C[1:]}')  
             print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
             self.driver.quit()
             exit()    
@@ -226,7 +227,7 @@ class SQLInjector:
             print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
             if self.args.Continue:
                 for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C}')
+                    print(B+'             '+R+': '+O+f'{C[1:]}')
             print(B+'[+] '+R+'Password : '+P+ 'password') 
             self.driver.quit()
             exit()
@@ -311,7 +312,7 @@ class SQLInjector:
         parser.add_argument('-l', '--live'        ,  action='store_true', help="Show the web browser window (disable headless mode)")
         parser.add_argument('-T', '--time'        ,  help="Sleep duration between requests")
 
-        self.args = parser.parse_args()   
+        self.args = parser.parse_args() 
         print(W+"")
         if len(sys.argv)!=1 :
             pass
