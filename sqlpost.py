@@ -203,7 +203,6 @@ class SQLInjector:
            self.Data_Analysis()           
     def Data_Analysis(self):
         print('\n') 
-       
         if len(self.payload_list) > 0 or len(self.url_list) > 0 :
             print(B+'[*] '+'SLQ Injaction Successful  Login \n')
             for url in set(self.url_list):
