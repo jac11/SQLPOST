@@ -218,23 +218,23 @@ class SQLInjector:
                 print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
                 print(B+'[+] '+R+'Password : '+O+f'{self.payload_list[0]}')
                 if self.args.Continue:
-                    for C in self.payload_list:
-                        print(B+'             '+R+': '+O+f'{C[1:]}')
+                    for C in self.payload_list[1:]:
+                        print(B+'             '+R+': '+O+f'{C}')
                 self.driver.quit()        
                 exit()        
             elif self.args.password:
                 print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
                 if self.args.Continue:
-                    for C in self.payload_list:
-                        print(B+'             '+R+': '+O+f'{C[1:]}')  
+                    for C in self.payload_list[1:]:
+                        print(B+'             '+R+': '+O+f'{C}')  
                 print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
                 self.driver.quit()
                 exit()    
             elif not  self.args.username and not self.args.password:
                 print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
                 if self.args.Continue:
-                    for C in self.payload_list:
-                        print(B+'             '+R+': '+O+f'{C[1:]}')
+                    for C in self.payload_list[1:]:
+                        print(B+'             '+R+': '+O+f'{C}')
                 print(B+'[+] '+R+'Password : '+P+ 'password') 
                 self.driver.quit()
                 exit()
