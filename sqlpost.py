@@ -203,37 +203,41 @@ class SQLInjector:
            self.Data_Analysis()           
     def Data_Analysis(self):
         print('\n') 
-        print(B+'[*] '+'SLQ Injaction Successful  Login \n')
-        for url in set(self.url_list):
-            print(B+'[*] '+'Redirections  : '+R,  url+"\n")
-        print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
-        if self.args.username:
-            print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
-            print(B+'[+] '+R+'Password : '+O+f'{self.payload_list[0]}')
-            if self.args.Continue:
-                for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C[1:]}')
-            self.driver.quit()        
-            exit()        
-        elif self.args.password:
-            print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
-            if self.args.Continue:
-                for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C[1:]}')  
-            print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
-            self.driver.quit()
-            exit()    
-        elif not  self.args.username and not self.args.password:
-            print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
-            if self.args.Continue:
-                for C in self.payload_list:
-                    print(B+'             '+R+': '+O+f'{C[1:]}')
-            print(B+'[+] '+R+'Password : '+P+ 'password') 
-            self.driver.quit()
-            exit()
-        if len(self.payload_list) or len(self.url_list) == 0 :   
-            print(B+'[!] '+R+'Web May Not Vulnerable To SQL Injaction '+W)
-            print(B+'[*] '+R+'Saugger To Use anther list Command '+W) 
+       
+        if len(self.payload_list) > 0 or len(self.url_list) > 0 :
+            print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+            for url in set(self.url_list):
+                print(B+'[*] '+'Redirections  : '+R,  url+"\n")
+            print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
+            if self.args.username:
+                print(B+'[+] '+R+'username : '+P+f'{self.args.username}')
+                print(B+'[+] '+R+'Password : '+O+f'{self.payload_list[0]}')
+                if self.args.Continue:
+                    for C in self.payload_list:
+                        print(B+'             '+R+': '+O+f'{C[1:]}')
+                self.driver.quit()        
+                exit()        
+            elif self.args.password:
+                print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
+                if self.args.Continue:
+                    for C in self.payload_list:
+                        print(B+'             '+R+': '+O+f'{C[1:]}')  
+                print(B+'[+] '+R+'Password : '+P+ f'{self.args.password}')  
+                self.driver.quit()
+                exit()    
+            elif not  self.args.username and not self.args.password:
+                print(B+'[+] '+R+'username : '+O+f'{self.payload_list[0]}')
+                if self.args.Continue:
+                    for C in self.payload_list:
+                        print(B+'             '+R+': '+O+f'{C[1:]}')
+                print(B+'[+] '+R+'Password : '+P+ 'password') 
+                self.driver.quit()
+                exit()
+        elif len(self.payload_list) or len(self.url_list) == 0 :  
+            print()
+            print(B + '[*] ' + 'SQL Injection Unsuccessful Login\n')
+            print(B + '[!] ' + R + 'Website May Not Be Vulnerable To SQL Injection' + W)
+            print(B + '[*] ' + R + 'Suggest Using Another List Command' + W) 
             self.driver.quit()
             exit()
     def Info_Print(self):
