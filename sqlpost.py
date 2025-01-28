@@ -170,7 +170,7 @@ class SQLInjector:
                 if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source\
                 or self.args.url == self.driver.current_url or ('username' or password) in page_source:
                     print('\n\n')
-                    print(B+'\n[*]'+R+' SLQ Injaction Command    : '+P, command +W)
+                    print(B+'\n[*]'+R+' SQL Injaction Command    : '+P, command +W)
                     print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
                     if self.args.error:
                         print(B+'[*]'+R+' Status                   : '+Y+self.args.error+W)
@@ -210,7 +210,7 @@ class SQLInjector:
         print('\n') 
        
         if len(self.payload_list) > 0 or len(self.url_list) > 0 :
-            print(B+'[*] '+'SLQ Injaction Successful  Login \n')
+            print(B+'[*] '+'SQL Injaction Successful  Login \n')
             for url in set(self.url_list):
                 print(B+'[*] '+'Redirections  : '+R,  url+"\n")
             print(O+'='*30+'\n\n'+B+'[!] '+R+'Credentials  : - '+O+'\n'+'='* 20+'\n\n'+W)
