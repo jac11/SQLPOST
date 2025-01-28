@@ -111,8 +111,13 @@ class SQLInjector:
         self.url_list = []
         self.payload_list = []
         if self.args.wordlist:
-            list_command  = open(self.args.wordlist,'r')   
-            list_command  = list_command.readlines()       
+            try :
+                list_command  = open(self.args.wordlist,'r')   
+                list_command  = list_command.readlines() 
+            except FileNotFoundError as e:
+                print(R+"[+] Error     -------------|- "+Y+ f" {type(e).__name__}"+R+' ['+O+f"{self.args.wordlist}"+R+'] '+W) 
+                self.driver.quit()
+                exit()          
         else:
             list_command  = open("./Package/sql",'r')
             list_command  = list_command.readlines() 
@@ -176,19 +181,19 @@ class SQLInjector:
                         sys.stdout.write('\x1b[2K')    
                 else:
                     if self.args.username:
-                        print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command[0:26]   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command[0:20]   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)
                         if not self.args.Continue:
                             self.Data_Analysis()
                     elif self.args.password:
-                        print(R+"|  "+Y+f"{command[0:26] :<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{command[0:20] :<23}",R+"| "+P+f"{     self.args.password   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)  
                         if not self.args.Continue:
                             self.Data_Analysis()
                     elif not  self.args.username and not self.args.password:  
-                        print(R+"|  "+Y+f"{command[0:26] :<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
+                        print(R+"|  "+Y+f"{command[0:20] :<23}",R+"| "+P+f"{'   password    ':<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)
 
@@ -203,6 +208,7 @@ class SQLInjector:
            self.Data_Analysis()           
     def Data_Analysis(self):
         print('\n') 
+       
         if len(self.payload_list) > 0 or len(self.url_list) > 0 :
             print(B+'[*] '+'SLQ Injaction Successful  Login \n')
             for url in set(self.url_list):
